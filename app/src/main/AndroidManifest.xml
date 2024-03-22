@@ -13,6 +13,18 @@
         android:theme="@style/Theme.MoveOn"
         tools:targetApi="31">
         <activity
+            android:name=".view.UniversityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.University"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".view.RegisterActivity"
             android:exported="false" />
         <activity
