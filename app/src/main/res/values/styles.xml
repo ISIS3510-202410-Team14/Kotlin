@@ -1,0 +1,5 @@
+<resources>
+    <style name="CurvedFrameLayout">
+        <item name="android:background">@drawable/rounded_corners</item>
+    </style>
+</resources>

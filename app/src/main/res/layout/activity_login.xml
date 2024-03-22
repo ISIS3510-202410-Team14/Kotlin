@@ -55,25 +55,27 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="LOGIN"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="9dp"/>
 
 
     <Button
-        android:id="@+id/buttonNexttime"
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="Next Time"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="6dp"/>
 
     <TextView
+        android:id="@+id/textViewRegisterLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Don't have an account? Register here."
         android:gravity="center"
+        android:text="Don't have an account? Register here."
         android:textSize="18sp"
-        android:id="@+id/textViewRegisterLink"/>
+        android:textColor="@android:color/black">
 
+    </TextView>
 
 </LinearLayout>
