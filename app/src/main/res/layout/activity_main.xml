@@ -186,7 +186,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="9dp"
-            android:text="Inicio"
+            android:text="Perfil"
             android:textColor="@android:color/white" />
         <TextView
             android:layout_width="0dp"
@@ -194,7 +194,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="9dp"
-            android:text="Inicio"
+            android:text="Favoritos"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -203,7 +203,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="9dp"
-            android:text="Buscar"
+            android:text="presentacion"
             android:textColor="@android:color/white" />
 
         <!-- Agrega más TextView para más opciones de navegación aquí -->
