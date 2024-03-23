@@ -3,7 +3,6 @@ package com.optic.moveon.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.widget.AppCompatButton
 import com.optic.moveon.R
 
@@ -16,7 +15,7 @@ class InitioActivity : AppCompatActivity() {
         val btn1= findViewById<AppCompatButton>(R.id.btn1)
 
         btn1.setOnClickListener {
-                val intent= Intent(this,LoginActivity::class.java)
+                val intent= Intent(this,AuthActivity::class.java)
                 startActivity(intent)
         }
 

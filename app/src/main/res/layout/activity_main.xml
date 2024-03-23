@@ -24,7 +24,7 @@
         android:layout_width="380dp"
         android:layout_height="217dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="90dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.513"
@@ -37,66 +37,58 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                style="@style/CurvedFrameLayout"
                 android:layout_width="125dp"
                 android:layout_height="180dp"
                 android:layout_marginEnd="10dp">
 
 
-                <VideoView
-                    style="@style/CurvedFrameLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </VideoView>
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="205dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/fot_usa" />
 
             </FrameLayout>
 
             <FrameLayout
-                style="@style/CurvedFrameLayout"
                 android:layout_width="125dp"
                 android:layout_height="180dp"
                 android:layout_marginEnd="10dp">
 
 
-                <VideoView
-                    style="@style/CurvedFrameLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </VideoView>
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="205dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/fot2" />
 
             </FrameLayout>
 
             <FrameLayout
-                style="@style/CurvedFrameLayout"
                 android:layout_width="125dp"
                 android:layout_height="180dp"
                 android:layout_marginEnd="10dp">
 
 
-                <VideoView
-                    style="@style/CurvedFrameLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </VideoView>
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="205dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/fot3" />
 
             </FrameLayout>
 
             <FrameLayout
-            style="@style/CurvedFrameLayout"
             android:layout_width="125dp"
             android:layout_height="180dp"
             android:layout_marginEnd="10dp">
 
 
-            <VideoView
-                style="@style/CurvedFrameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </VideoView>
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="205dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/fot4" />
 
         </FrameLayout>
         </LinearLayout>
@@ -218,7 +210,7 @@
         android:layout_width="340dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
-        android:background="@color/black"
+        android:background="@color/p_rosado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -227,7 +219,7 @@
         android:layout_width="340dp"
         android:layout_height="50dp"
         android:layout_marginTop="100dp"
-        android:background="@color/black"
+        android:background="@color/p_rosado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
@@ -237,7 +229,7 @@
         android:layout_width="340dp"
         android:layout_height="50dp"
         android:layout_marginTop="164dp"
-        android:background="@color/black"
+        android:background="@color/p_rosado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"

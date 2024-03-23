@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "531711512615",
+    "project_id": "moveonuniandes",
+    "storage_bucket": "moveonuniandes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531711512615:android:9250faff79b623bb49be02",
+        "android_client_info": {
+          "package_name": "com.optic.moveon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4A_kbz5UCmInC8_LbyFBAXdmSqdzibzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
