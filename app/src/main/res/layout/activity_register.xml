@@ -1,89 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.cblom/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
-    tools:context=".view.RegisterActivity">
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".view.AuthActivity">
 
-    <!-- Nombre -->
+    <ImageView
+        android:layout_marginTop="40dp"
+        android:layout_width="400dp"
+        android:layout_height="109dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/logo" />
+
     <TextView
-        android:id="@+id/textViewNombre"
+        android:id="@+id/textViewErrorMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:text="Please fill the details"
+        android:textSize="18sp"
+        android:layout_marginBottom="40dp"/>
 
-    <EditText
-        android:id="@+id/editTextNombre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Ingrese su nombre"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewNombre"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Apellido -->
-    <TextView
-        android:id="@+id/textViewApellido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apellido"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
 
-    <EditText
-        android:id="@+id/editTextApellido"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Ingrese su apellido"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewApellido"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNombre" />
 
-    <!-- Correo -->
-    <TextView
-        android:id="@+id/textViewCorreo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Correo"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextApellido" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id = "@+id/email"
+            android:hint = "Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:maxLength="50"
+            android:layout_marginBottom="32dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editTextCorreo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Ingrese su correo"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewCorreo"
-        app:layout_constraintTop_toBottomOf="@+id/editTextApellido" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id = "@+id/password"
+            android:hint = "Password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:maxLength="50"
+            android:layout_marginBottom="32dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Checkbox -->
-    <CheckBox
-        android:id="@+id/checkBoxCertificado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿Cuenta con certificado en inglés?"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCorreo" />
 
-    <!-- Botón de registro -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id = "@+id/confirmpassword"
+            android:hint = "Confirm Password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:maxLength="50"
+            android:layout_marginBottom="32dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
     <Button
-        android:id="@+id/buttonRegistrarse"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrarse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxCertificado" />
+        android:textSize="18sp"
+        android:text="REGISTER"
+        android:layout_marginTop="9dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</LinearLayout>

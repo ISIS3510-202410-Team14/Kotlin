@@ -26,28 +26,38 @@
         android:textSize="18sp"
         android:layout_marginBottom="16dp"/>
 
-    <EditText
-        android:id="@+id/editTextEmail"
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:padding="8dp"
-        android:textSize="24sp"
-        android:maxLength="50"
-        android:layout_marginBottom="32dp"
-        android:inputType="textEmailAddress" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id = "@+id/email"
+            android:hint = "Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:maxLength="50"
+            android:layout_marginBottom="32dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id = "@+id/password"
+            android:hint = "Password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:maxLength="50"
+            android:layout_marginBottom="32dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textSize="24sp"
-        android:padding="8dp"
-        android:maxLength="32"
-        android:layout_marginBottom="32dp"/>
 
     <Button
         android:id="@+id/buttonLogin"
