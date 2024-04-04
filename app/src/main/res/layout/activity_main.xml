@@ -6,18 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".view.HomeActivity">
 
-    <EditText
-        android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
-        android:background="@drawable/rounded_edittext_background"
-        android:hint="Find your exchange"
-        android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:hint="Find your exchange"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/botonmicro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:backgroundTint="#FFE68B1F"
+            app:srcCompat="@drawable/baseline_keyboard_voice_24"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="100dp" />
+    </LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -344,6 +361,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
