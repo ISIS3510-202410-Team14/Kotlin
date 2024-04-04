@@ -23,7 +23,7 @@ class BusquedaVozActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBusquedaVozBinding
     private lateinit var adaptador: AdaptadorNombres
 
-    var listaNombres = arrayListOf("Estados Unidos")
+    var listaNombres = arrayListOf("Estados Unidos", "Colombia", "Argentina")
 
     private val startActivityForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -41,6 +41,7 @@ class BusquedaVozActivity : AppCompatActivity() {
 
         binding.rvNombres.layoutManager = LinearLayoutManager(this)
         adaptador = AdaptadorNombres(listaNombres)
+        binding.rvNombres.adapter = adaptador
 
         binding.ibtnMicrofono.setOnClickListener {
             binding.etNombre.setText("")
