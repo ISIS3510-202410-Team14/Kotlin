@@ -15,6 +15,9 @@
         android:theme="@style/Theme.MoveOn"
         tools:targetApi="31">
         <activity
+            android:name=".view.RequirementActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.BusquedaVozActivity"
             android:exported="false" />
         <activity
