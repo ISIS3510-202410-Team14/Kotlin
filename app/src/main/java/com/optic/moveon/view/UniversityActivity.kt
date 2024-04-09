@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.optic.moveon.R
-import com.optic.moveon.databinding.ActivityLoginBinding
 import com.optic.moveon.databinding.ActivityUniversityBinding
 
 class UniversityActivity : AppCompatActivity() {
@@ -18,7 +17,7 @@ class UniversityActivity : AppCompatActivity() {
 
         binding = ActivityUniversityBinding.inflate(layoutInflater)
 
-        setContentView(R.layout.activity_university)
+        setContentView(binding.root)
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
