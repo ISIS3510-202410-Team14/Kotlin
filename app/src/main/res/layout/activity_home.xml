@@ -6,53 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".view.HomeActivity">
 
-    <HorizontalScrollView
-        android:layout_width="414dp"
-        android:layout_height="291dp"
-        android:layout_marginStart="24dp"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="260dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <VideoView
-                android:layout_width="125dp"
-                android:layout_height="205dp"
-                android:layout_marginRight="10dp">
-
-
-
-
-            </VideoView>
-
-
-            <VideoView
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginRight="10dp"></VideoView>
-
-            <VideoView
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginRight="10dp"></VideoView>
-
-            <VideoView
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginRight="10dp"></VideoView>
-
-            <VideoView
-                android:layout_width="125dp"
-                android:layout_height="125dp">
-        </VideoView>
-
-
-    </LinearLayout>
-
-</HorizontalScrollView>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/user_item"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

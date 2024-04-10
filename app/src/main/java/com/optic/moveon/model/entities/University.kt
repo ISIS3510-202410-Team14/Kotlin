@@ -5,5 +5,6 @@ data class University(
     val name: String,
     val description: String,
     val rating: Float,
-    val country: String
+    val country: String,
+    val imagen: String
 )
