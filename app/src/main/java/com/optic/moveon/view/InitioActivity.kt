@@ -13,10 +13,17 @@ class InitioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio)
         val btn1= findViewById<AppCompatButton>(R.id.btn1)
+        val btn2= findViewById<AppCompatButton>(R.id.btn2)
+
 
         btn1.setOnClickListener {
                 val intent= Intent(this,AuthActivity::class.java)
                 startActivity(intent)
+        }
+
+        btn2.setOnClickListener {
+            val intent= Intent(this,ListadoActivity2::class.java)
+            startActivity(intent)
         }
 
 

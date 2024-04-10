@@ -11,7 +11,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 import com.optic.moveon.R
-import com.optic.moveon.model.entities.MyAdapter
 import com.optic.moveon.model.entities.University
 
 class HomeActivity : AppCompatActivity() {
@@ -25,46 +24,15 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        userRecyclerview = findViewById(R.id.univerList)
+        userRecyclerview = findViewById(R.id.universityList)
         userRecyclerview.layoutManager = LinearLayoutManager(this)
         userRecyclerview.setHasFixedSize(true)
 
         universityList = arrayListOf<University>()
-        getUserData()
-
-    }
-
-    private fun getUserData() {
 
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
 
-        dbref.addValueEventListener(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                if (snapshot.exists()) {
-
-                    for (userSnapshot in snapshot.children) {
-
-
-                        val university = userSnapshot.getValue(University::class.java)
-                        universityList.add(university!!)
-
-                    }
-
-                    userRecyclerview.adapter = MyAdapter(universityList)
-
-
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-
-        })
-
     }
+
+
 }
