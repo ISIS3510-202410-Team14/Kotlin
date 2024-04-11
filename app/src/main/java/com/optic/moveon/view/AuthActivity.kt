@@ -32,20 +32,18 @@ class AuthActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
 
-        val btn_next= findViewById<Button>(R.id.btn_next)
 
 
         //Se supone que aqui debería ir un contador que si le da click lo llevara a la vista de home
-        btn_next.setOnClickListener {
+
+        binding.btnNext.setOnClickListener {
             logFirebaseEvent("ingreso_a_home")
-            val intent= Intent(this,MainActivity::class.java)
+            val intent = Intent(this, UniversityActivity::class.java)
             startActivity(intent)
         }
 
 
-
         binding.textViewRegisterLink.setOnClickListener {
-            logFirebaseEvent("ingreso_a_home")
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
@@ -58,6 +56,7 @@ class AuthActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
+                        logFirebaseEvent("ingreso_a_home")
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }else{
