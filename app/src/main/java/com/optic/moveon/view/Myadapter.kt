@@ -1,5 +1,8 @@
 package com.optic.moveon.view
 
+import android.widget.ImageView
+
+import com.squareup.picasso.Picasso
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,18 +28,18 @@ class MyAdapter(private val universityList : ArrayList<University>) :RecyclerVie
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val currentitem =universityList[position]
+        Picasso.get().load(currentitem.image).into(holder.imageView)
 
-        holder.name.text = currentitem.name
-        holder.country.text = currentitem.country
-        holder.description.text = currentitem.description
 
     }
 
 
     class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
-        val name : TextView = itemView.findViewById(R.id.uni_name)
-        val country : TextView = itemView.findViewById(R.id.uni_country)
-        val description : TextView = itemView.findViewById(R.id.uni_rating)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+
     }
 }
+
+
+
