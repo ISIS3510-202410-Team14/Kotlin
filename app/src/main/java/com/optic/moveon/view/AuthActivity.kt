@@ -11,6 +11,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.optic.moveon.R
 import com.optic.moveon.databinding.ActivityLoginBinding
+import com.optic.moveon.model.UserSessionManager
 
 class AuthActivity : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class AuthActivity : AppCompatActivity() {
 
         binding.btnNext.setOnClickListener {
             logFirebaseEvent("ingreso_a_home")
-            val intent = Intent(this, UniversityActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -57,6 +58,7 @@ class AuthActivity : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
                         logFirebaseEvent("ingreso_a_home")
+                        UserSessionManager.saveSession()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }else{
