@@ -23,7 +23,7 @@ class BusquedaVozActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBusquedaVozBinding
     private lateinit var adaptador: AdaptadorNombres
 
-    var listaNombres = arrayListOf("Estados Unidos", "Colombia", "Argentina")
+    var listaNombres = arrayListOf("Harvard", "Barcelona", "Lisboa", "Melbourne", "Paris", "Rome")
 
     private val startActivityForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
