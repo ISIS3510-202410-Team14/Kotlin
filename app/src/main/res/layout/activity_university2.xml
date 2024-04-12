@@ -6,12 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.UniversityActivity">
 
-    <!-- Vista de imagen para la cabecera -->
 
-    <!-- Nombre de la universidad -->
-
-
-    <!-- Ubicación de la universidad -->
 
     <ImageView
         android:id="@+id/headerImage"

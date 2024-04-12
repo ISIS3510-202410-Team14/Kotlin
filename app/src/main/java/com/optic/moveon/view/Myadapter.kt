@@ -1,5 +1,8 @@
 package com.optic.moveon.view
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.ImageView
 
 import com.squareup.picasso.Picasso
@@ -11,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.optic.moveon.R
 import com.optic.moveon.model.entities.University
 
-class MyAdapter(private val universityList : ArrayList<University>) :RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
+class MyAdapter(private val context: Context, private val universityList : ArrayList<University>) :RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -29,6 +32,14 @@ class MyAdapter(private val universityList : ArrayList<University>) :RecyclerVie
 
         val currentitem =universityList[position]
         Picasso.get().load(currentitem.image).into(holder.imageView)
+
+        holder.imageView.setOnClickListener {
+            val intent = Intent(context, UniversityActivity::class.java)
+            intent.putExtra("university_name", currentitem.name)
+            println("University Name: ${currentitem.name}")
+            context.startActivity(intent)
+        }
+
 
 
     }

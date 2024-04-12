@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
 
         universityList = arrayListOf<University>()
 
+        val adapter = MyAdapter(this, universityList)
+        userRecyclerview.adapter = adapter
+
+
         getUserData()
 
 
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                         universityList.add(university!!)
 
                     }
-                    userRecyclerview.adapter = MyAdapter(universityList)
+                    userRecyclerview.adapter?.notifyDataSetChanged()
 
 
                 }

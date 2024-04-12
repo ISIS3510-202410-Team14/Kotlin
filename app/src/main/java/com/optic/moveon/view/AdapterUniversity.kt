@@ -3,54 +3,45 @@ package com.optic.moveon.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.optic.moveon.R
 import com.optic.moveon.databinding.UniInfoItemBinding
+import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 
-class AdapterUniversity(private val listener: UniversityPropertiesListener) : RecyclerView.Adapter<AdapterUniversity.ClassViewHolder>(){
-    interface UniversityPropertiesListener{
-        fun onUniversityClick(item: UniversityProperties, position: Int)
-    }
-    private var itemList = arrayListOf<UniversityProperties>()
+class AdapterUniversity(private val university : University) :RecyclerView.Adapter<AdapterUniversity.MyViewHolder>(){
 
-    fun setItemList(list:List<UniversityProperties>){
-        itemList.clear()
-        itemList.addAll(list)
-        notifyDataSetChanged()
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassViewHolder {
-        val binding = UniInfoItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ClassViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ClassViewHolder, position: Int) {
-        holder.bind(itemList.get(position))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.user_item,
+            parent,false)
+        return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return 1
+    }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
+        val currentitem =university
+
+        holder.name.text = currentitem.name
+        holder.country.text = currentitem.country
+
     }
 
 
 
-    inner class ClassViewHolder(private val binding: UniInfoItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        init {
-            binding.root.setOnClickListener(this)
-        }
-        fun bind(item:UniversityProperties){
-            binding.nombreItem.text = item.nombre
-            binding.itemDescription.text = item.description
-            if (item.selected){
-                binding.itemDescription.visibility = View.VISIBLE
-            }else{
-                binding.itemDescription.visibility = View.GONE
-            }
 
-        }
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
-        override fun onClick(p0: View?) {
-            listener.onUniversityClick(itemList.get(adapterPosition),adapterPosition)
-        }
+        val name : TextView = itemView.findViewById(R.id.universityName)
+        val country : TextView = itemView.findViewById(R.id.universityLocation)
     }
+
+
+
+
 }
