@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:title="Inicio"
+        android:icon="@drawable/img_home_gray_50_01" />
+    <item
+        android:id="@+id/navigation_location"
+        android:title="Mapa"
+        android:icon="@drawable/img_location_on" />
+    <item
+        android:id="@+id/navigation_hojas"
+        android:title="Documentos"
+        android:icon="@drawable/img_document_scanner" />
+    <item
+        android:id="@+id/navigation_perfil"
+        android:title="Perfil"
+        android:icon="@drawable/img_lock" />
+</menu>

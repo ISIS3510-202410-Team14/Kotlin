@@ -3,7 +3,9 @@ package com.optic.moveon.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
@@ -18,6 +20,7 @@ import com.optic.moveon.R
 import com.optic.moveon.databinding.ActivityLoginBinding
 import com.optic.moveon.databinding.ActivityMainBinding
 import com.optic.moveon.model.entities.University
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var userRecyclerview: RecyclerView
     private lateinit var universityList: ArrayList<University>
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,59 +37,55 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         userRecyclerview.setHasFixedSize(true)
 
-
         universityList = arrayListOf<University>()
 
         val adapter = MyAdapter(this, universityList)
         userRecyclerview.adapter = adapter
 
-
         getUserData()
-
-
-
-
+        setupBottomNavigationView()
         binding.botonmicro.setOnClickListener {
             val intent = Intent(this, BusquedaVozActivity::class.java)
             startActivity(intent)
         }
 
-
-
     }
-
+    private fun setupBottomNavigationView() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_location -> {
+                    // Al hacer clic en el elemento de ubicación, abrir la actividad MapActivity
+                    val intent = Intent(this, MapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                // Agregar más casos según sea necesario
+                else -> false
+            }
+        }
+    }
     private fun getUserData() {
-
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
 
         dbref.addValueEventListener(object : ValueEventListener {
-
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 if (snapshot.exists()) {
-
                     for (userSnapshot in snapshot.children) {
-
                         val university = userSnapshot.getValue(University::class.java)
                         universityList.add(university!!)
-
                     }
                     userRecyclerview.adapter?.notifyDataSetChanged()
-
-
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-
-
         })
-
     }
 }
+
 
 
 
