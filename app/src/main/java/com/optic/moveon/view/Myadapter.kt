@@ -32,15 +32,15 @@ class MyAdapter(private val context: Context, private val universityList : Array
 
         val currentitem =universityList[position]
         Picasso.get().load(currentitem.image).into(holder.imageView)
+        holder.texto.text = currentitem.name
+
 
         holder.imageView.setOnClickListener {
-            val intent = Intent(context, UniversityActivity::class.java)
+            val intent = Intent(holder.itemView.context, UniversityActivity::class.java)
             intent.putExtra("university_name", currentitem.name)
             println("University Name: ${currentitem.name}")
-            context.startActivity(intent)
+            holder.itemView.context.startActivity(intent)
         }
-
-
 
     }
 
@@ -48,6 +48,7 @@ class MyAdapter(private val context: Context, private val universityList : Array
     class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val texto: TextView= itemView.findViewById(R.id.texto)
 
     }
 }

@@ -35,15 +35,7 @@
             android:stateListAnimator="@null" />
         />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn2"
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Quiero Conocer"
-            android:background="@drawable/rounded_button"
-            android:elevation="4dp"
-            android:stateListAnimator="@null"/>
+
 
     </LinearLayout>
 

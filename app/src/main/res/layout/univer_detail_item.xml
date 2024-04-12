@@ -11,23 +11,32 @@
     <!-- Nombre de la universidad -->
 
 
-    <!-- Ubicación de la universidad -->
-
-
-
-    <!-- Contenedor para el rating de la universidad -->
+    <ImageView
+        android:id="@+id/headerImage"
+        android:layout_width="360dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_corners"
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/melbourne"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/universityName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="University of Melbourne"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.077"
-        app:layout_constraintStart_toStartOf="parent" />
+    android:id="@+id/universityName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:text="University of Melbourne"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.077"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/headerImage" />
 
     <TextView
         android:id="@+id/universityLocation"
@@ -69,6 +78,7 @@
 
         <!-- Opción de Requisitos -->
         <LinearLayout
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -77,6 +87,7 @@
             android:padding="8dp">
 
             <ImageView
+                android:id="@+id/sitio"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/university" />
@@ -174,6 +185,5 @@
 
 
     </androidx.recyclerview.widget.RecyclerView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
