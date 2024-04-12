@@ -22,7 +22,7 @@
             android:layout_weight="1.5"
             android:textSize="16sp"
             android:gravity="center"
-            android:hint="Texto recibido"
+            android:hint="Transcripción"
             android:inputType="text"/>
 
         <ImageButton

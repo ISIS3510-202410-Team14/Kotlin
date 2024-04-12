@@ -24,11 +24,19 @@ class BusquedaVozActivity : AppCompatActivity() {
     private lateinit var adaptador: AdaptadorNombres
 
     var listaNombres = arrayListOf("Harvard", "Barcelona", "Lisboa", "Melbourne", "Paris", "Rome")
+    var listaUrls = arrayListOf(
+        "https://www.harvard.edu/",
+        "https://www.ub.edu/",
+        "https://www.ulisboa.pt/",
+        "https://www.unimelb.edu.au/",
+        "https://www.psbedu.paris",
+        "https://www.unica.it/"
+    )
 
     private val startActivityForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == Activity.RESULT_OK) {
+        if (it.resultCode == RESULT_OK) {
             var result = it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             binding.etNombre.setText(result!![0])
         }
@@ -40,7 +48,7 @@ class BusquedaVozActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.rvNombres.layoutManager = LinearLayoutManager(this)
-        adaptador = AdaptadorNombres(listaNombres)
+        adaptador = AdaptadorNombres(listaNombres, listaUrls)
         binding.rvNombres.adapter = adaptador
 
         binding.ibtnMicrofono.setOnClickListener {
@@ -48,10 +56,10 @@ class BusquedaVozActivity : AppCompatActivity() {
             escucharVoz()
         }
 
-        binding.etNombre.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+        binding.etNombre.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(p0: Editable?) {
                 filtrar(p0.toString())
@@ -67,7 +75,7 @@ class BusquedaVozActivity : AppCompatActivity() {
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
 
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US, es")
 
         if (intent.resolveActivity(packageManager) != null) {
             startActivityForResult.launch(intent)
@@ -76,14 +84,8 @@ class BusquedaVozActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Su dispositivo no admite entrada por voz", Toast.LENGTH_LONG).show()
         }
     }
-    fun filtrar(texto: String) {
-        val listaFiltrada: ArrayList<String> = arrayListOf()
 
-        for (nombre in listaNombres) {
-            if (nombre.toLowerCase().contains(texto.toLowerCase())) {
-                listaFiltrada.add(nombre)
-            }
-        }
-        adaptador.filtrar(listaFiltrada)
+    fun filtrar(texto: String) {
+        adaptador.filtrar(texto)
     }
 }
