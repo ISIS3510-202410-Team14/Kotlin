@@ -57,8 +57,9 @@ class AuthActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful){
+                        val uid = firebaseAuth.currentUser?.uid
+                        UserSessionManager.saveSession(uid)
                         logFirebaseEvent("ingreso_a_home")
-                        UserSessionManager.saveSession()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     }else{
