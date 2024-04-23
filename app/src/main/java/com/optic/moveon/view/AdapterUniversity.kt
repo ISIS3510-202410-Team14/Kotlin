@@ -46,11 +46,9 @@ class AdapterUniversity(private val university: University, private val context:
                 if (intent.resolveActivity(holder.itemView.context.packageManager) != null) {
                     context.startActivity(intent)
                 } else {
-                    // Manejar el caso en el que no haya una actividad que pueda manejar el intento
                     Toast.makeText(holder.itemView.context, "No se puede abrir el enlace", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                // Manejar el caso en el que la descripción de la URL sea nula o vacía
                 Toast.makeText(holder.itemView.context, "La URL es nula o vacía", Toast.LENGTH_SHORT).show()
             }
         }
