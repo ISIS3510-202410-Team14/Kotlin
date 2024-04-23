@@ -30,7 +30,6 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
-        val uid = firebaseAuth.currentUser?.uid
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
 
 
@@ -44,6 +43,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (password == confirmPass) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            val uid = firebaseAuth.currentUser?.uid
                             if (uid != null) {
                                 val user = User(uid, name, email, password)  // Crear usuario con UID
                                 databaseReference.child(uid).setValue(user).addOnCompleteListener { dbTask ->

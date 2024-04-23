@@ -1,33 +1,39 @@
-package com.optic.moveon.model
+package com.optic.moveon.model;
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.Context;
+import android.content.SharedPreferences;
 
-object UserSessionManager {
+public object UserSessionManager {
 
-    private const val PREF_NAME = "UserSessionPref"
-    private const val KEY_IS_LOGGED_IN = "isLoggedIn"
-    private lateinit var sharedPreferences: SharedPreferences
+    private const val PREF_NAME = "UserSessionPref";
+    private const val KEY_IS_LOGGED_IN = "isLoggedIn";
+    private const val KEY_UID = "uid";  // Constante para el UID del usuario
+    private lateinit var sharedPreferences: SharedPreferences;
 
     fun init(context: Context) {
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    fun saveSession() {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(KEY_IS_LOGGED_IN, true)
-        // Add other session data to be saved
-        editor.apply()
+    fun saveSession(uid: String?) {  // Agregar parámetro UID
+        val editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        if (uid != null) {
+            editor.putString(KEY_UID, uid);  // Guardar el UID en las preferencias
+        }
+        editor.apply();
+    }
+
+    fun getUid(): String? {
+        return sharedPreferences.getString(KEY_UID, null);  // Recuperar el UID guardado
     }
 
     fun signOut() {
-        val editor = sharedPreferences.edit()
-        editor.clear()
-        editor.apply()
+        val editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     fun isUserLoggedIn(): Boolean {
-        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
+        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
-
 }

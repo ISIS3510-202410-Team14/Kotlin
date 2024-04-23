@@ -3,6 +3,7 @@ package com.optic.moveon.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -21,6 +22,8 @@ import com.optic.moveon.databinding.ActivityLoginBinding
 import com.optic.moveon.databinding.ActivityMainBinding
 import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.optic.moveon.model.UserSessionManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,9 +41,11 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview.setHasFixedSize(true)
 
         universityList = arrayListOf<University>()
-
         val adapter = MyAdapter(this, universityList)
         userRecyclerview.adapter = adapter
+
+        val uid = UserSessionManager.getUid()
+        Log.d("AuthActivity", "UID guardado: $uid")
 
         getUserData()
         setupBottomNavigationView()
