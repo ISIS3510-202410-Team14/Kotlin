@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.optic.moveon.databinding.ActivityUniversityBinding
+import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 
@@ -29,6 +30,8 @@ class UniversityActivity : AppCompatActivity() {
         binding = ActivityUniversityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val uid = UserSessionManager.getUid()
+        Log.d("UniversityActivity", "UID guardado: $uid")
 
         userRecyclerview = binding.imgdetailed
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -71,7 +74,6 @@ class UniversityActivity : AppCompatActivity() {
                 // (aquí puedes manejar los errores de Firebase)
             }
         })
-
 
 
 
