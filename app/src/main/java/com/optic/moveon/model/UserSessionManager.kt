@@ -30,5 +30,4 @@ object UserSessionManager {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
 
-    // You can add other methods to get/set session data as needed
 }
