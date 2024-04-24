@@ -38,7 +38,6 @@ class ChatActivity2 : AppCompatActivity() {
         userRecyclerview.setHasFixedSize(true)
 
         val uid = UserSessionManager.getUid()
-        Log.d("AuthActivity", "UID guardado: $uid")
 
 
         chatList = arrayListOf<Chat>()
@@ -50,23 +49,19 @@ class ChatActivity2 : AppCompatActivity() {
         binding.buttonSend.setOnClickListener {
             val message = binding.editTextMessage.text.toString().trim()
 
-            // Verificar si el mensaje no está vacío
             if (message.isNotEmpty()) {
                 val chat = Chat(
-                    id = "rrrr3", // Aquí puedes generar un ID único para el mensaje
+                    id = uid,
                     mensaje = message,
                     hora = 20,
                     name = uid
 
                 )
 
-                // Guardar el mensaje en Firebase
                 saveMessageToFirebase(chat)
 
-                // Limpiar el EditText después de enviar el mensaje
                 binding.editTextMessage.text.clear()
             } else {
-                // Mostrar un mensaje de error si el campo de texto está vacío
                 Toast.makeText(this, "Por favor, escriba un mensaje", Toast.LENGTH_SHORT).show()
             }
         }
