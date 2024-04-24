@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.cerrar.setOnClickListener{
+            UserSessionManager.signOut()
+            val intent = Intent(this, AuthActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     private fun setupBottomNavigationView() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
