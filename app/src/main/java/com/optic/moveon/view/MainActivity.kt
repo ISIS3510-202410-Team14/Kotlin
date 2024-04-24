@@ -1,29 +1,24 @@
 package com.optic.moveon.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.LayoutInflater
-import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.optic.moveon.R
-import com.optic.moveon.databinding.ActivityLoginBinding
-import com.optic.moveon.databinding.ActivityMainBinding
-import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.optic.moveon.R
+import com.optic.moveon.databinding.ActivityMainBinding
+import com.optic.moveon.model.Imagenes
 import com.optic.moveon.model.UserSessionManager
+import com.optic.moveon.model.entities.University
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,23 +48,22 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, BusquedaVozActivity::class.java)
             startActivity(intent)
         }
-
     }
+
     private fun setupBottomNavigationView() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_location -> {
-                    // Al hacer clic en el elemento de ubicación, abrir la actividad MapActivity
                     val intent = Intent(this, MapActivity::class.java)
                     startActivity(intent)
                     true
                 }
-                // Agregar más casos según sea necesario
                 else -> false
             }
         }
     }
+
     private fun getUserData() {
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
 
@@ -78,18 +72,58 @@ class MainActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
                         val university = userSnapshot.getValue(University::class.java)
-                        universityList.add(university!!)
+                        // Guardar imagen localmente si es necesario
+                        university?.let {
+                            // Verificar si la imagen ya está guardada localmente antes de intentar guardarla nuevamente
+                            if (Imagenes.loadImage(this@MainActivity, "university_image_${university.id}") == null) {
+                                saveUniversityImageLocally(it)
+                            }
+                            universityList.add(university)
+                        }
                     }
                     userRecyclerview.adapter?.notifyDataSetChanged()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                // Manejar errores de cancelación, si es necesario
             }
         })
     }
+
+    private fun saveUniversityImageLocally(university: University) {
+        val imageUrl = university.image
+        if (!imageUrl.isNullOrEmpty()) {
+            val filename = "university_image_${university.id}"
+            // Verificar si la imagen ya está en caché
+            if (Imagenes.loadImage(this, filename) == null) {
+                // Si la imagen no está en caché, cargarla desde la URL y guardarla en caché
+                Picasso.get().load(imageUrl).into(object : Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        bitmap?.let {
+                            Imagenes.saveImage(this@MainActivity, filename, it)
+                            Log.d("MainActivity", "Imagen guardada en caché: $filename")
+                        }
+                    }
+
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        // Manejar fallos en la carga de la imagen
+                        Log.e("MainActivity", "Error cargando la imagen: ${e?.message}")
+                        // Aquí puedes mostrar un mensaje de error al usuario
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        // Aquí puedes realizar alguna acción mientras la imagen está siendo cargada
+                    }
+                })
+            } else {
+                Log.d("MainActivity", "La imagen ya está en caché: $filename")
+            }
+        }
+    }
 }
+
+
 
 
 

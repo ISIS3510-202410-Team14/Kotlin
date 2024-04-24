@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.optic.moveon.R
 import com.optic.moveon.databinding.UniInfoItemBinding
 import com.optic.moveon.model.FavoritesCache
+import com.optic.moveon.model.Imagenes
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
@@ -42,24 +43,29 @@ class AdapterUniversity(private val university: University, private val context:
         return 1
     }
 
-
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        // Intenta obtener la universidad del cache primero
-        val cachedUniversity = FavoritesCache.getFavorite(university.id ?: -1)
-        val currentitem = cachedUniversity ?: university
+        val currentUniversity = university
 
-        // Se establecen los valores en los elementos de la vista del elemento RecyclerView
-        holder.name.text = currentitem.name
-        holder.country.text = currentitem.country
-        Picasso.get().load(currentitem.image).into(holder.imageView)
+        holder.name.text = currentUniversity.name
+        holder.country.text = currentUniversity.country
+
+        // Cargamos la imagen desde el almacenamiento local si está disponible
+        val filename = "university_image_${currentUniversity.id}"
+        val bitmap = Imagenes.loadImage(context, filename)
+        if (bitmap != null) {
+            holder.imageView.setImageBitmap(bitmap)
+        } else {
+            // Si no está en el almacenamiento local, cargamos la imagen desde Firebase
+            Picasso.get().load(currentUniversity.image).into(holder.imageView)
+        }
 
         // Verificar si la universidad es favorita para cambiar el icono del favorito
-        updateFavoriteIcon(holder.favorite, currentitem)
+        updateFavoriteIcon(holder.favorite, currentUniversity)
 
+        // Evento de clic en el enlace de la universidad
         holder.icon.setOnClickListener {
-            if (!currentitem.description.isNullOrEmpty()) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentitem.description))
+            if (!currentUniversity.description.isNullOrEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentUniversity.description))
 
                 if (intent.resolveActivity(holder.itemView.context.packageManager) != null) {
                     context.startActivity(intent)
@@ -71,6 +77,7 @@ class AdapterUniversity(private val university: University, private val context:
             }
         }
 
+        // Evento de clic en el ícono de favoritos
         holder.favorite.setOnClickListener {
             val uid = UserSessionManager.getUid()  // Obtener el UID del usuario
             if (uid != null) {
@@ -80,16 +87,16 @@ class AdapterUniversity(private val university: University, private val context:
                     databaseReference.child(uid).child(university.id.toString()).removeValue().addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(context, "Universidad removida de favoritos", Toast.LENGTH_SHORT).show()
-                            updateFavoriteIcon(holder.favorite, currentitem, isFavorite = false)
+                            updateFavoriteIcon(holder.favorite, currentUniversity, isFavorite = false)
                         }
                     }
                 } else {
                     // Si no es favorito, agregar a favoritos
-                    FavoritesCache.addFavorite(currentitem)
+                    FavoritesCache.addFavorite(currentUniversity)
                     databaseReference.child(uid).child(university.id.toString()).setValue(university.name).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(context, "Universidad agregada a favoritos", Toast.LENGTH_SHORT).show()
-                            updateFavoriteIcon(holder.favorite, currentitem, isFavorite = true)
+                            updateFavoriteIcon(holder.favorite, currentUniversity, isFavorite = true)
                         }
                     }
                 }
@@ -97,8 +104,6 @@ class AdapterUniversity(private val university: University, private val context:
                 Toast.makeText(context, "Usuario no identificado", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
     private fun updateFavoriteIcon(favoriteIcon: ImageView, university: University, isFavorite: Boolean? = null) {
