@@ -60,8 +60,11 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
+        binding.cerrar.setOnClickListener{
+            UserSessionManager.signOut()
+            val intent = Intent(this, AuthActivity::class.java)
+            startActivity(intent)
+        }
 
     }
     private fun setupBottomNavigationView() {
