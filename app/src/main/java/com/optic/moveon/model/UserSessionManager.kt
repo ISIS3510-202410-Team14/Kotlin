@@ -27,6 +27,7 @@ public object UserSessionManager {
         return sharedPreferences.getString(KEY_UID, null);  // Recuperar el UID guardado
     }
 
+
     fun signOut() {
         val editor = sharedPreferences.edit();
         editor.clear();

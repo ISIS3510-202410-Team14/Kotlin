@@ -24,6 +24,7 @@ import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.optic.moveon.model.UserSessionManager
+import com.optic.moveon.model.entities.Chat
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,18 +42,23 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview.setHasFixedSize(true)
 
         universityList = arrayListOf<University>()
+        getUserData()
         val adapter = MyAdapter(this, universityList)
         userRecyclerview.adapter = adapter
 
         val uid = UserSessionManager.getUid()
         Log.d("AuthActivity", "UID guardado: $uid")
 
-        getUserData()
+
         setupBottomNavigationView()
+
+        setupBottomChatView()
+
         binding.botonmicro.setOnClickListener {
             val intent = Intent(this, BusquedaVozActivity::class.java)
             startActivity(intent)
         }
+
 
         binding.cerrar.setOnClickListener{
             UserSessionManager.signOut()
@@ -66,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_location -> {
-                    // Al hacer clic en el elemento de ubicación, abrir la actividad MapActivity
                     val intent = Intent(this, MapActivity::class.java)
                     startActivity(intent)
                     true
@@ -76,6 +81,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setupBottomChatView() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_perfil -> {
+                    val intent = Intent(this, ChatActivity2::class.java)
+                    startActivity(intent)
+                    true
+                }
+                // Agregar más casos según sea necesario
+                else -> false
+            }
+        }
+    }
+
+
+
+
+
     private fun getUserData() {
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
 
