@@ -23,14 +23,32 @@ class BusquedaVozActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBusquedaVozBinding
     private lateinit var adaptador: AdaptadorNombres
 
-    var listaNombres = arrayListOf("Harvard", "Barcelona", "Lisboa", "Melbourne", "Paris", "Rome")
+    var listaNombres = arrayListOf("Harvard", "Barcelona", "Lisboa", "Melbourne", "Paris",
+        "Rome", "Oporto", "Buenos Aires", "Chile", "Sao Paulo", "Panamá",
+        "República Dominicana", "Autónoma", "Politécnico", "Monterrey", "Valencia", "Madrid",
+        "Nantes", "Grenoble", "Sttutgart", "AGH Polonia")
     var listaUrls = arrayListOf(
         "https://www.harvard.edu/",
         "https://www.ub.edu/",
         "https://www.ulisboa.pt/",
         "https://www.unimelb.edu.au/",
         "https://www.psbedu.paris",
-        "https://www.unica.it/"
+        "https://www.unica.it/",
+        "https://www.up.pt/portal/pt/",
+        "https://www.itba.edu.ar",
+        "https://www.uc.cl",
+        "https://www5.usp.br",
+        "https://utp.ac.pa",
+        "https://pucmm.edu.do",
+        "https://www.unam.mx",
+        "https://www.ipn.mx",
+        "https://www.tec.mx",
+        "https://www.upv.es",
+        "https://www.upm.es",
+        "https://www.ec-nantes.fr",
+        "https://www.grenoble-inp.fr/en",
+        "https://www.uni-stuttgart.de/en/",
+        "https://www.agh.edu.pl/en/"
     )
 
     private val startActivityForResult = registerForActivityResult(
