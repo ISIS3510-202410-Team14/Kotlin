@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.optic.moveon.DefaultApp
 import com.optic.moveon.databinding.ActivityUniversityBinding
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.University
@@ -82,6 +83,6 @@ class UniversityActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView(university: University?) {
-        userRecyclerview.adapter = AdapterUniversity(university ?: University(),this)
+        userRecyclerview.adapter = AdapterUniversity(university ?: University(),this, (application as DefaultApp).localdb.localUniversityDao())
     }
 }
