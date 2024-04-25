@@ -2,8 +2,11 @@ package com.optic.moveon.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 
-public object UserSessionManager {
+object UserSessionManager {
 
     private const val PREF_NAME = "UserSessionPref";
     private const val KEY_IS_LOGGED_IN = "isLoggedIn";
@@ -32,6 +35,7 @@ public object UserSessionManager {
         val editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+        FirebaseAuth.getInstance().signOut()
     }
 
     fun isUserLoggedIn(): Boolean {

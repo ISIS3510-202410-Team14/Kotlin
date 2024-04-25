@@ -63,4 +63,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("com.squareup.picasso:picasso:2.8")
     implementation("com.google.android.gms:play-services-maps:17.0.0")
+
+    //Progress Dialog Library
+    implementation("com.jpardogo.googleprogressbar:library:1.2.0")
 }
