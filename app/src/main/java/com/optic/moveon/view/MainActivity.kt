@@ -23,8 +23,10 @@ import com.optic.moveon.databinding.ActivityMainBinding
 import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.optic.moveon.DefaultApp
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.Chat
+import com.optic.moveon.model.entities.LocalUniversity
 
 class MainActivity : AppCompatActivity() {
 
@@ -103,13 +105,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun getUserData() {
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
-
+        val dao = (application as DefaultApp).localdb.localUniversityDao()
         dbref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
                         val university = userSnapshot.getValue(University::class.java)
+                        //val localResult = dao.getUniversityById(userSnapshot.key!!)
                         universityList.add(university!!)
+                        //if (localResult == null){
+                            //dao.insertUniversity(LocalUniversity(firebaseId = userSnapshot.key!!, imageUrl = university.image, favorite = false, uid = 0))
+                        //}
                     }
                     userRecyclerview.adapter?.notifyDataSetChanged()
                 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.optic.moveon.R
+import com.optic.moveon.data.UniversityDAO
 import com.optic.moveon.databinding.UniInfoItemBinding
 import com.optic.moveon.model.FavoritesCache
 import com.optic.moveon.model.UserSessionManager
@@ -21,9 +22,9 @@ import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 import com.squareup.picasso.Picasso
 
-class AdapterUniversity(private val university: University, private val context: Context) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
+class AdapterUniversity(private val university: University, private val context: Context, private val universityDao: UniversityDAO) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
 
-    private lateinit var databaseReference: DatabaseReference
+    private var databaseReference: DatabaseReference
 
     init {
         // Inicializar la referencia a la base de datos una sola vez
