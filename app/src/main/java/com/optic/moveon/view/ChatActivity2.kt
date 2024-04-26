@@ -27,7 +27,7 @@ class ChatActivity2 : AppCompatActivity() {
         binding = ActivityChat2Binding.inflate(layoutInflater)
         setContentView(binding.root)
         userRecyclerview = binding.detalladochatScrollView
-        userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         userRecyclerview.setHasFixedSize(true)
 
         val uid = UserSessionManager.getUid()
@@ -101,11 +101,11 @@ class ChatActivity2 : AppCompatActivity() {
     private fun getUserData() {
         dbref = FirebaseDatabase.getInstance().getReference("Chats/Harvard")
 
-        dbref.addValueEventListener(object : ValueEventListener {
+        dbref.orderByChild("hora").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     chatList.clear() // Limpiar la lista antes de agregar nuevos datos
-                    for (userSnapshot in snapshot.children) {
+                    for (userSnapshot in snapshot.children.reversed()) { // Revertir el orden de los mensajes
                         val university = userSnapshot.getValue(Chat::class.java)
                         university?.let { chatList.add(it) }
                     }
@@ -118,6 +118,7 @@ class ChatActivity2 : AppCompatActivity() {
             }
         })
     }
+
 
     private fun saveMessageToFirebase(chat: Chat) {
         val dbref = FirebaseDatabase.getInstance().getReference("Chats/Harvard").push()
