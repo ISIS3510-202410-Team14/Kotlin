@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -27,6 +28,8 @@ import com.optic.moveon.DefaultApp
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.Chat
 import com.optic.moveon.model.entities.LocalUniversity
+import com.optic.moveon.viewmodel.MainViewModel
+import com.optic.moveon.viewmodel.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,11 +37,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var userRecyclerview: RecyclerView
     private lateinit var universityList: ArrayList<University>
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, MainViewModelFactory((application as DefaultApp).localdb.localUniversityDao())).get(MainViewModel::class.java)
         userRecyclerview = binding.horizontalScrollView
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         userRecyclerview.setHasFixedSize(true)
@@ -104,27 +109,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun getUserData() {
-        dbref = FirebaseDatabase.getInstance().getReference("Universities")
-        val dao = (application as DefaultApp).localdb.localUniversityDao()
-        dbref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (userSnapshot in snapshot.children) {
-                        val university = userSnapshot.getValue(University::class.java)
-                        //val localResult = dao.getUniversityById(userSnapshot.key!!)
-                        universityList.add(university!!)
-                        //if (localResult == null){
-                            //dao.insertUniversity(LocalUniversity(firebaseId = userSnapshot.key!!, imageUrl = university.image, favorite = false, uid = 0))
-                        //}
-                    }
-                    userRecyclerview.adapter?.notifyDataSetChanged()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+        viewModel.getUniversities()
+        viewModel.universityLiveData.observe(this){
+            universityList.clear()
+            universityList.addAll(it)
+            userRecyclerview.adapter?.notifyDataSetChanged()
+        }
     }
 }
 
