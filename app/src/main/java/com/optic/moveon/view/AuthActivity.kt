@@ -9,6 +9,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
@@ -59,36 +60,55 @@ class AuthActivity : AppCompatActivity() {
         }
 
 
-        //Se supone que aqui debería ir otro contador pero para la misma variable ya que este también lleva al user a la vista home
         binding.buttonLogin.setOnClickListener {
             showProgressBar()
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
 
+            // Verificar que se ingresaron datos en ambos campos
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 if (isNetworkAvailable(this)) {
-                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val uid = firebaseAuth.currentUser?.uid
-                            UserSessionManager.saveSession(uid)
-                            logFirebaseEvent("ingreso_a_home")
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            hideProgressBar()
-                            Toast.makeText(this, it.exception?.localizedMessage ?: "Login failed", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    // Ejecutar la autenticación en un hilo separado
+                    Thread {
+                        Log.d("AuthThread", "Thread started")
+                        firebaseAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val uid = firebaseAuth.currentUser?.uid
+                                    UserSessionManager.saveSession(uid)
+                                    logFirebaseEvent("ingreso_a_home")
+                                    runOnUiThread {
+                                        // Ir a la pantalla principal si la autenticación fue exitosa
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                } else {
+                                    runOnUiThread {
+                                        // Mostrar mensaje de error si la autenticación falló
+                                        hideProgressBar()
+                                        Toast.makeText(
+                                            this,
+                                            task.exception?.localizedMessage ?: "Login failed",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                        Log.d("AuthThread", "Thread finished")
+                    }.start()
                 } else {
                     hideProgressBar()
-                    Toast.makeText(this, "No Internet Connection. Please try again later.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "No Internet Connection. Please try again later.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             } else {
                 hideProgressBar()
                 Toast.makeText(this, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
     private fun logFirebaseEvent(eventName: String) {
         val bundle = Bundle()
