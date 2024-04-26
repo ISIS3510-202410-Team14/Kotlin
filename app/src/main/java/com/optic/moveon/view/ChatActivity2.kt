@@ -3,6 +3,7 @@ package com.optic.moveon.view
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +17,9 @@ class ChatActivity2 : AppCompatActivity() {
     private lateinit var binding: ActivityChat2Binding
     private lateinit var dbref: DatabaseReference
     private lateinit var chatList: ArrayList<Chat>
+
     private lateinit var userRecyclerview: RecyclerView
+
 
 
 
@@ -29,11 +32,17 @@ class ChatActivity2 : AppCompatActivity() {
         userRecyclerview = binding.detalladochatScrollView
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         userRecyclerview.setHasFixedSize(true)
-
         val uid = UserSessionManager.getUid()
 
+
+        val universityId = intent.getStringExtra("name")
+        println(universityId)
+        Log.i("hola", universityId ?: "University ID is null")
+
         chatList = arrayListOf<Chat>()
-        getUserData()
+        if (universityId != null) {
+            getUserData(universityId)
+        }
         val adapter = AdapterChat(this, chatList)
         userRecyclerview.adapter = adapter
 
@@ -45,7 +54,7 @@ class ChatActivity2 : AppCompatActivity() {
                 val chat = Chat(
                     id = uid,
                     mensaje = message,
-                    hora = 20, // Reemplaza este valor con la hora actual si es necesario
+                    hora =  System.currentTimeMillis(), // Reemplaza este valor con la hora actual si es necesario
                     name = uid
                 )
 
@@ -71,26 +80,47 @@ class ChatActivity2 : AppCompatActivity() {
 
     private fun saveMessageLocally(chat: Chat) {
         val sharedPreferences = getSharedPreferences("CachedMessages", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("message", chat.mensaje).apply()
+        val cachedMessages = sharedPreferences.getStringSet("messages", mutableSetOf()) ?: mutableSetOf()
+
+        // Limitar el número de mensajes en caché a 5
+        if (cachedMessages.size < 5) {
+            cachedMessages.add(chat.mensaje)
+            sharedPreferences.edit().putStringSet("messages", cachedMessages).apply()
+        }
     }
 
     private fun checkAndSendCachedMessages() {
         if (isInternetAvailable()) {
             val sharedPreferences = getSharedPreferences("CachedMessages", Context.MODE_PRIVATE)
-            val cachedMessage = sharedPreferences.getString("message", null)
+            val cachedMessages = sharedPreferences.getStringSet("messages", mutableSetOf()) ?: mutableSetOf()
 
-            if (cachedMessage != null) {
-                val chat = Chat(
-                    id = UserSessionManager.getUid(),
-                    mensaje = cachedMessage,
-                    hora = System.currentTimeMillis(), // Obtener la hora actual en milisegundos
-                    name = UserSessionManager.getUid()
-                )
-                saveMessageToFirebase(chat)
-                sharedPreferences.edit().remove("message").apply()
+            if (cachedMessages.isNotEmpty()) {
+                val iterator = cachedMessages.iterator()
+                var count = 0
+
+                while (iterator.hasNext() && count < 5) {
+                    val cachedMessage = iterator.next()
+                    val chat = Chat(
+                        id = UserSessionManager.getUid(),
+                        mensaje = cachedMessage,
+                        hora = System.currentTimeMillis(), // Obtener la hora actual en milisegundos
+                        name = UserSessionManager.getUid()
+                    )
+                    saveMessageToFirebase(chat)
+                    count++
+                }
+
+                // Si hay más de 5 mensajes sin enviar, mostrar aviso
+                if (cachedMessages.size > 5) {
+                    Toast.makeText(this, "Hay mensajes adicionales en caché que no se pudieron enviar debido a la falta de conexión a internet", Toast.LENGTH_SHORT).show()
+                }
+
+                // Limpiar mensajes en caché después de enviarlos
+                sharedPreferences.edit().remove("messages").apply()
             }
         }
     }
+
 
     private fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -98,13 +128,14 @@ class ChatActivity2 : AppCompatActivity() {
         return networkInfo != null && networkInfo.isConnected
     }
 
-    private fun getUserData() {
-        dbref = FirebaseDatabase.getInstance().getReference("Chats/Harvard")
+    private fun getUserData(universityId:String) {
+        dbref = FirebaseDatabase.getInstance().getReference("Chats/$universityId")
+
 
         dbref.orderByChild("hora").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    chatList.clear() // Limpiar la lista antes de agregar nuevos datos
+                    chatList.clear()
                     for (userSnapshot in snapshot.children.reversed()) { // Revertir el orden de los mensajes
                         val university = userSnapshot.getValue(Chat::class.java)
                         university?.let { chatList.add(it) }

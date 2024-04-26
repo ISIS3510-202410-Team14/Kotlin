@@ -78,6 +78,19 @@ class AdapterUniversity(private val university: University, private val context:
             }
         }
 
+        holder.form.setOnClickListener {
+            val intent = Intent(holder.itemView.context, ChatActivity2::class.java)
+            intent.putExtra("name",  currentUniversity.name)
+            holder.itemView.context.startActivity(intent)
+        }
+
+
+
+
+
+
+
+
         // Evento de clic en el ícono de favoritos
         holder.favorite.setOnClickListener {
             val uid = UserSessionManager.getUid()  // Obtener el UID del usuario
@@ -121,6 +134,7 @@ class AdapterUniversity(private val university: University, private val context:
         val country: TextView = itemView.findViewById(R.id.universityLocation)
         val imageView: ImageView = itemView.findViewById(R.id.headerImage)
         val icon: ImageView = itemView.findViewById(R.id.sitio)
+        val form: ImageView = itemView.findViewById(R.id.chat)
         val favorite: ImageView = itemView.findViewById(R.id.favorite)
     }
 }
