@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -23,8 +24,12 @@ import com.optic.moveon.databinding.ActivityMainBinding
 import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.optic.moveon.DefaultApp
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.Chat
+import com.optic.moveon.model.entities.LocalUniversity
+import com.optic.moveon.viewmodel.MainViewModel
+import com.optic.moveon.viewmodel.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,11 +37,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var userRecyclerview: RecyclerView
     private lateinit var universityList: ArrayList<University>
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, MainViewModelFactory((application as DefaultApp).localdb.localUniversityDao())).get(MainViewModel::class.java)
         userRecyclerview = binding.horizontalScrollView
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         userRecyclerview.setHasFixedSize(true)
@@ -46,8 +53,8 @@ class MainActivity : AppCompatActivity() {
         val adapter = MyAdapter(this, universityList)
         userRecyclerview.adapter = adapter
 
-        val uid = UserSessionManager.getUid()
-        Log.d("AuthActivity", "UID guardado: $uid")
+        //val uid = UserSessionManager.getUid()
+        //Log.d("AuthActivity", "UID guardado: $uid")
 
 
         setupBottomNavigationView()
@@ -62,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.cerrar.setOnClickListener{
             UserSessionManager.signOut()
+            viewModel.deleteUniversities()
             val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         }
@@ -102,30 +110,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun getUserData() {
-        dbref = FirebaseDatabase.getInstance().getReference("Universities")
-
-        dbref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (userSnapshot in snapshot.children) {
-                        val university = userSnapshot.getValue(University::class.java)
-                        universityList.add(university!!)
-                    }
-                    userRecyclerview.adapter?.notifyDataSetChanged()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+        viewModel.getUniversities()
+        viewModel.universityLiveData.observe(this){
+            universityList.clear()
+            universityList.addAll(it)
+            userRecyclerview.adapter?.notifyDataSetChanged()
+        }
     }
 }
-
-
-
-
-
-
-
-
