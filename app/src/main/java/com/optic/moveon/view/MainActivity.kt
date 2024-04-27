@@ -58,9 +58,7 @@ class MainActivity : AppCompatActivity() {
 
 
         setupBottomNavigationView()
-
-        setupBottomChatView()
-
+        
         binding.botonmicro.setOnClickListener {
             val intent = Intent(this, BusquedaVozActivity::class.java)
             startActivity(intent)
@@ -90,20 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBottomChatView() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
-        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.navigation_perfil -> {
-                    val intent = Intent(this, ChatActivity2::class.java)
-                    startActivity(intent)
-                    true
-                }
-                // Agregar más casos según sea necesario
-                else -> false
-            }
-        }
-    }
+
 
 
 
