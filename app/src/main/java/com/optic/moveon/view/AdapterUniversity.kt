@@ -24,11 +24,17 @@ import com.optic.moveon.model.entities.UniversityProperties
 import com.squareup.picasso.Picasso
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 class AdapterUniversity(private val university: University, private val context: Context, private val universityDao: UniversityDAO) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
-
 =======
+>>>>>>> Stashed changes
+
 class AdapterUniversity(private val university: University, private val context: Context) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
     private  var firebaseAnalytics: FirebaseAnalytics
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
 >>>>>>> Stashed changes
     private var databaseReference: DatabaseReference
 
