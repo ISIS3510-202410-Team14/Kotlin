@@ -27,6 +27,7 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var dialog: Dialog
+    private var startTime: Long = 0
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -68,6 +69,7 @@ class AuthActivity : AppCompatActivity() {
             // Verificar que se ingresaron datos en ambos campos
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 if (isNetworkAvailable(this)) {
+                    startTime = System.currentTimeMillis()
                     // Ejecutar la autenticación en un hilo separado
                     Thread {
                         Log.d("AuthThread", "Thread started")
@@ -77,6 +79,8 @@ class AuthActivity : AppCompatActivity() {
                                     val uid = firebaseAuth.currentUser?.uid
                                     UserSessionManager.saveSession(uid)
                                     logFirebaseEvent("ingreso_a_home")
+                                    val elapsedTime = System.currentTimeMillis() - startTime
+                                    logLoginResponseTime(elapsedTime) // Registrar el tiempo de respuesta
                                     runOnUiThread {
                                         // Ir a la pantalla principal si la autenticación fue exitosa
                                         val intent = Intent(this, MainActivity::class.java)
@@ -115,6 +119,12 @@ class AuthActivity : AppCompatActivity() {
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, eventName)
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
         firebaseAnalytics.logEvent(eventName, bundle)
+    }
+
+    private fun logLoginResponseTime(timeInMillis: Long) {
+        val bundle = Bundle()
+        bundle.putLong("response_time", timeInMillis)
+        firebaseAnalytics.logEvent("login_response_time", bundle)
     }
 
     private fun showProgressBar(){
