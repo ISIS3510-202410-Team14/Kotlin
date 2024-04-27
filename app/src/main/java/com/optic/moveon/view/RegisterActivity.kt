@@ -20,6 +20,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 
 
@@ -82,28 +83,40 @@ class RegisterActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && confirmPass.isNotEmpty()) {
                 if (password == confirmPass) {
                     if (isNetworkAvailable(this)) {
-                        // Connexion disponible, intentar registrar al usuario
-                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val uid = firebaseAuth.currentUser?.uid
-                                if (uid != null) {
-                                    val user = User(uid, name, email, password)  // Crear usuario con UID
-                                    databaseReference.child(uid).setValue(user).addOnCompleteListener { dbTask ->
-                                        if (dbTask.isSuccessful) {
-                                            val intent = Intent(this, AuthActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        } else {
-                                            hideProgressBar()
-                                            Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
+                        // Ejecutar la autenticación en un hilo separado
+                        Thread {
+                            Log.d("RegisterActivity", "Thread started")
+                            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val uid = firebaseAuth.currentUser?.uid
+                                    if (uid != null) {
+                                        val user = User(uid, name, email, password)
+                                        databaseReference.child(uid).setValue(user).addOnCompleteListener { dbTask ->
+                                            if (dbTask.isSuccessful) {
+                                                runOnUiThread {
+                                                    val intent = Intent(this, AuthActivity::class.java)
+                                                    startActivity(intent)
+                                                    finish()
+                                                }
+                                            } else {
+                                                runOnUiThread {
+                                                    hideProgressBar()
+                                                    Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show()
+                                                }
+                                            }
                                         }
                                     }
+                                } else {
+                                    runOnUiThread {
+                                        hideProgressBar()
+                                        Toast.makeText(this, task.exception?.message ?: "Registration failed", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-                            } else {
-                                hideProgressBar()
-                                Toast.makeText(this, task.exception?.message ?: "Registration failed", Toast.LENGTH_SHORT).show()
+                                Log.d("RegisterActivity", "Thread finished")
+                                // Llamar a hideProgressBar() después de completar la autenticación
+                                runOnUiThread { hideProgressBar() }
                             }
-                        }
+                        }.start()
                     } else {
                         // No hay conexión a internet, guardar datos en caché
                         cacheUserData(name, email, password)
@@ -119,9 +132,6 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
             }
         }
-
-
-
     }
 
     private fun showProgressBar(){
