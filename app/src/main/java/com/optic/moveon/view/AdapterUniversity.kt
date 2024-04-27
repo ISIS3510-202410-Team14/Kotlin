@@ -3,6 +3,7 @@ package com.optic.moveon.view
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.optic.moveon.R
@@ -23,24 +25,16 @@ import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 import com.squareup.picasso.Picasso
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-class AdapterUniversity(private val university: University, private val context: Context, private val universityDao: UniversityDAO) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
-=======
->>>>>>> Stashed changes
 
 class AdapterUniversity(private val university: University, private val context: Context) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
     private  var firebaseAnalytics: FirebaseAnalytics
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 
->>>>>>> Stashed changes
     private var databaseReference: DatabaseReference
 
     init {
         // Inicializar la referencia a la base de datos una sola vez
         databaseReference = FirebaseDatabase.getInstance().getReference("Favorites")
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context) //Colocarlo aca esta bien?
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -56,6 +50,7 @@ class AdapterUniversity(private val university: University, private val context:
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         val currentUniversity = university
 
         holder.name.text = currentUniversity.name
@@ -106,22 +101,25 @@ class AdapterUniversity(private val university: University, private val context:
         holder.favorite.setOnClickListener {
             val uid = UserSessionManager.getUid()  // Obtener el UID del usuario
             if (uid != null) {
-                if (FavoritesCache.getFavorite(university.id ?: -1) != null) {
+                val isFavorite = FavoritesCache.getFavorite(university.id ?: -1) != null
+                if (isFavorite) {
                     // Si ya es favorito, remover de favoritos
                     FavoritesCache.removeFavorite(university.id!!)
                     databaseReference.child(uid).child(university.id.toString()).removeValue().addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(context, "Universidad removida de favoritos", Toast.LENGTH_SHORT).show()
-                            updateFavoriteIcon(holder.favorite, currentUniversity, isFavorite = false)
+                            updateFavoriteIcon(holder.favorite, university, isFavorite = false)
+                            universityFirebaseEvent("remove_favorite", university.name)  // Log the event when a university is removed from favorites
                         }
                     }
                 } else {
                     // Si no es favorito, agregar a favoritos
-                    FavoritesCache.addFavorite(currentUniversity)
+                    FavoritesCache.addFavorite(university)
                     databaseReference.child(uid).child(university.id.toString()).setValue(university.name).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(context, "Universidad agregada a favoritos", Toast.LENGTH_SHORT).show()
-                            updateFavoriteIcon(holder.favorite, currentUniversity, isFavorite = true)
+                            updateFavoriteIcon(holder.favorite, university, isFavorite = true)
+                            universityFirebaseEvent("add_favorite", university.name)  // Log the event when a university is added to favorites
                         }
                     }
                 }
@@ -129,6 +127,7 @@ class AdapterUniversity(private val university: University, private val context:
                 Toast.makeText(context, "Usuario no identificado", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun updateFavoriteIcon(favoriteIcon: ImageView, university: University, isFavorite: Boolean? = null) {
@@ -139,6 +138,16 @@ class AdapterUniversity(private val university: University, private val context:
             favoriteIcon.setImageResource(R.drawable.heart) // Asume que tienes un drawable que representa "no favorito"
         }
     }
+
+    private fun universityFirebaseEvent(eventName: String, universityName: String?) {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, eventName)
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+        firebaseAnalytics.logEvent(eventName, bundle)
+    }
+
+
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.universityName)
