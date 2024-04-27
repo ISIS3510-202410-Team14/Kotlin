@@ -1,5 +1,6 @@
 package com.optic.moveon.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -81,6 +82,15 @@ class UniversityActivity : AppCompatActivity() {
                         Picasso.get().load(it).into(binding.headerImage)
                     }
                     intFavorite(university)
+
+                    binding.chat.setOnClickListener {
+                        val intent = Intent(this@UniversityActivity, ChatActivity2::class.java)
+                        intent.putExtra("name", university?.name)
+                        startActivity(intent)
+                    }
+
+
+
 
 
                 } else {

@@ -60,7 +60,9 @@ class ChatActivity2 : AppCompatActivity() {
 
                 // Verificar conexión a internet antes de enviar el mensaje
                 if (isInternetAvailable()) {
-                    saveMessageToFirebase(chat)
+                    if (universityId != null) {
+                        saveMessageToFirebase(chat,universityId)
+                    }
                 } else {
                     saveMessageLocally(chat)
                     Toast.makeText(this, "No hay conexión a internet. El mensaje se guardará en caché", Toast.LENGTH_SHORT).show()
@@ -75,7 +77,10 @@ class ChatActivity2 : AppCompatActivity() {
         }
 
         // Verificar y enviar mensajes almacenados en caché cuando la conexión está disponible
-        checkAndSendCachedMessages()
+
+        if (universityId != null) {
+            checkAndSendCachedMessages(universityId)
+        }
     }
 
     private fun saveMessageLocally(chat: Chat) {
@@ -89,7 +94,7 @@ class ChatActivity2 : AppCompatActivity() {
         }
     }
 
-    private fun checkAndSendCachedMessages() {
+    private fun checkAndSendCachedMessages(universityId: String) {
         if (isInternetAvailable()) {
             val sharedPreferences = getSharedPreferences("CachedMessages", Context.MODE_PRIVATE)
             val cachedMessages = sharedPreferences.getStringSet("messages", mutableSetOf()) ?: mutableSetOf()
@@ -106,7 +111,7 @@ class ChatActivity2 : AppCompatActivity() {
                         hora = System.currentTimeMillis(), // Obtener la hora actual en milisegundos
                         name = UserSessionManager.getUid()
                     )
-                    saveMessageToFirebase(chat)
+                    saveMessageToFirebase(chat,universityId)
                     count++
                 }
 
@@ -151,8 +156,8 @@ class ChatActivity2 : AppCompatActivity() {
     }
 
 
-    private fun saveMessageToFirebase(chat: Chat) {
-        val dbref = FirebaseDatabase.getInstance().getReference("Chats/Harvard").push()
+    private fun saveMessageToFirebase(chat: Chat,universityId: String) {
+        val dbref = FirebaseDatabase.getInstance().getReference("Chats/$universityId").push()
         chat.id = dbref.key // Asignar la clave generada como ID del chat
         dbref.setValue(chat)
             .addOnSuccessListener {
