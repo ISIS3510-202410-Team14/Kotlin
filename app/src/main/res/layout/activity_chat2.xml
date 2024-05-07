@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context=".view.ChatActivity2">
 
+    <TextView
+        android:id="@+id/textViewUniversityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:text="Universidad:" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detalladochatScrollView"

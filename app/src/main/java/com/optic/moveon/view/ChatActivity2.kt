@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +45,10 @@ class ChatActivity2 : AppCompatActivity() {
         if (universityId != null) {
             getUserData(universityId)
         }
+        binding.textViewUniversityName.text = universityId
+
+
+
         val adapter = AdapterChat(this, chatList)
         userRecyclerview.adapter = adapter
 
@@ -82,6 +88,8 @@ class ChatActivity2 : AppCompatActivity() {
             checkAndSendCachedMessages(universityId)
         }
     }
+
+
 
     private fun saveMessageLocally(chat: Chat) {
         val sharedPreferences = getSharedPreferences("CachedMessages", Context.MODE_PRIVATE)
