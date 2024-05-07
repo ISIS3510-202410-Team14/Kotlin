@@ -1,6 +1,7 @@
 package com.optic.moveon.view
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.optic.moveon.R
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.optic.moveon.databinding.ActivityBusquedaVozBinding
 import android.widget.Toast
@@ -105,5 +107,12 @@ class BusquedaVozActivity : AppCompatActivity() {
 
     fun filtrar(texto: String) {
         adaptador.filtrar(texto)
+    }
+
+    @Suppress("DEPRECATION")
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }

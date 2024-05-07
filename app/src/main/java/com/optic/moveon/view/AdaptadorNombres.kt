@@ -1,11 +1,14 @@
 package com.optic.moveon.view
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.optic.moveon.R
 import java.util.Locale
@@ -24,6 +27,14 @@ class AdaptadorNombres(var listaNombresOriginal: ArrayList<String>, var listaUrl
         val nombre = listaNombres[position]
         holder.tvNombre.text = nombre
         holder.itemView.setOnClickListener {
+            if (!isNetworkAvailable(holder.itemView.context)) {
+                Toast.makeText(
+                    holder.itemView.context,
+                    "No hay conexión a internet. No se puede abrir el enlace.",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(listaUrls[position]))
             it.context.startActivity(intent)
         }
@@ -48,5 +59,12 @@ class AdaptadorNombres(var listaNombresOriginal: ArrayList<String>, var listaUrl
             }
         }
         notifyDataSetChanged()
+    }
+
+    @Suppress("DEPRECATION")
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }
