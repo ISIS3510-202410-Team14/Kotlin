@@ -1,5 +1,7 @@
 package com.optic.moveon.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -47,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview = binding.horizontalScrollView
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         userRecyclerview.setHasFixedSize(true)
+        showSimpleAlert()
+
 
         universityList = arrayListOf<University>()
         getUserData()
@@ -86,6 +90,16 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun showSimpleAlert() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Recuerda que en pocos dias se cierran la aplicaciones para Harvard")
+        builder.setPositiveButton("Cerrar") { dialogInterface: DialogInterface, _: Int ->
+            dialogInterface.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
     }
 
 
