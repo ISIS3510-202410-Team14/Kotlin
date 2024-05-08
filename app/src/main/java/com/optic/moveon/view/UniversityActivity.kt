@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,6 +65,17 @@ class UniversityActivity : AppCompatActivity() {
             isFavorite = !isFavorite
             updateFavoriteIcon(isFavorite)
             viewModel.updateUniversity(LocalUniversity(firebaseId = university?.id, imageUrl = university?.image, favorite = isFavorite))
+
+            // Registra el evento dependiendo de si es favorito o no
+            if (isFavorite) {
+                Toast.makeText(this, "Universidad agregada a favoritos", Toast.LENGTH_SHORT).show()
+                universityFirebaseEvent("add_favorite", university?.name ?: "Unknown University")
+                Log.d("analytics","funcionoAgregar")
+            } else {
+                Toast.makeText(this, "Universidad removida de favoritos", Toast.LENGTH_SHORT).show()
+                universityFirebaseEvent("remove_favorite", university?.name ?: "Unknown University")
+                Log.d("analytics","funcionoEliminar")
+            }
         }
 
         dbref = FirebaseDatabase.getInstance().getReference("Universities")
@@ -127,6 +139,14 @@ class UniversityActivity : AppCompatActivity() {
         } else {
             binding.favorite.setImageResource(R.drawable.heart) // Asume que tienes un drawable que representa "no favorito"
         }
+    }
+
+    private fun universityFirebaseEvent(eventName: String, universityName: String?) {
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, eventName)
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+        firebaseAnalytics.logEvent(eventName, bundle)
     }
 
 }
