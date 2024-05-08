@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">MoveOn</string>
-    <string name="holaa">Holaa</string>
+    <string-array name="dropdown_items">
+        <item>Información 1</item>
+        <item>Información 2</item>
+        <item>Información 3</item>
+    </string-array>
 </resources>
