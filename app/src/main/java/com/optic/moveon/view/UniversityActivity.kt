@@ -22,6 +22,7 @@ import com.optic.moveon.databinding.ActivityUniversityBinding
 import com.optic.moveon.model.FavoritesCache
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.LocalUniversity
+import com.optic.moveon.model.entities.Requerimiento
 import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 import com.optic.moveon.viewmodel.MainViewModel
@@ -33,6 +34,8 @@ class UniversityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUniversityBinding
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var dbref: DatabaseReference
+    private lateinit var dbr: DatabaseReference
+
     private lateinit var userRecyclerview: RecyclerView
     private lateinit var adapterUniversity: AdapterUniversity
     private var university: University? = null
@@ -47,17 +50,45 @@ class UniversityActivity : AppCompatActivity() {
         val uid = UserSessionManager.getUid()
         Log.d("UniversityActivity", "UID guardado: $uid")
 
+
+        val universityId = intent.getStringExtra("university_name")
+
         binding.button1.setOnClickListener {
-            binding.infoTextView1.text = "Hola amigos"
+            // Mostrar la información de la universidad si los datos no son nulos
+            binding.infoTextView1.text = "Cupos: 10"
             binding.infoTextView1.visibility = View.VISIBLE
             binding.infoTextView2.visibility = View.GONE
         }
 
+        // Configurar los OnClickListeners para los otros botones
         binding.button2.setOnClickListener {
-            binding.infoTextView2.text = "Te quiero"
+            binding.infoTextView2.text = "Ingles B2"
             binding.infoTextView2.visibility = View.VISIBLE
             binding.infoTextView1.visibility = View.GONE
         }
+
+        binding.button3.setOnClickListener {
+            binding.infoTextView2.text = "One of the most prestigious universities globally, located in Cambridge, Massachusetts, known for its law, business, medical, and engineering faculties among others."
+            binding.infoTextView2.visibility = View.VISIBLE
+            binding.infoTextView1.visibility = View.GONE
+        }
+
+        binding.button4.setOnClickListener {
+            binding.infoTextView2.text = "Promedio: 4.8"
+            binding.infoTextView2.visibility = View.VISIBLE
+            binding.infoTextView1.visibility = View.GONE
+        }
+
+        binding.button5.setOnClickListener {
+            binding.infoTextView2.text = "Se necesita Visa"
+            binding.infoTextView2.visibility = View.VISIBLE
+            binding.infoTextView1.visibility = View.GONE
+        }
+
+
+
+
+
 
 
 
@@ -68,7 +99,6 @@ class UniversityActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
 
-        val universityId = intent.getStringExtra("university_name")
         println("jejejeee")
         println(universityId)
         Log.i("UniversityActivity", universityId ?: "University ID is null")
