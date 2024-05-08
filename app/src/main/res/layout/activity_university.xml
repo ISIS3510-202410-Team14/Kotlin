@@ -194,7 +194,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="mostrarInfo1"
-                android:text="Mostrar Info 1" />
+                android:text="Cupos" />
 
             <Button
                 android:id="@+id/button2"
@@ -203,7 +203,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="mostrarInfo2"
-                android:text="Mostrar Info 2" />
+                android:text="Idioma" />
 
             <Button
                 android:id="@+id/button3"
@@ -212,7 +212,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton3"
-                android:text="Botón 3" />
+                android:text="Info" />
         </LinearLayout>
 
         <!-- Segunda fila de botones -->
@@ -229,7 +229,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton4"
-                android:text="Botón 4" />
+                android:text="Promedio" />
 
             <Button
                 android:id="@+id/button5"
@@ -238,22 +238,75 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton5"
-                android:text="Botón 5" />
+                android:text="Visa" />
         </LinearLayout>
 
 
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/infoTextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información 1srrr"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
     <TextView
         android:id="@+id/infoTextView2"
-        android:layout_width="222dp"
-        android:layout_height="209dp"
-        android:text="Información 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información 1srrr"
+        android:textSize="24sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/infoTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información 1srrr"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/infoTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información 1srrr"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/infoTextView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Información 1srrr"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
 
 
 
