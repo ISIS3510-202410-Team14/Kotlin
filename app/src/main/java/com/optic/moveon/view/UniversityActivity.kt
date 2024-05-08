@@ -3,7 +3,9 @@ package com.optic.moveon.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,9 +47,21 @@ class UniversityActivity : AppCompatActivity() {
         val uid = UserSessionManager.getUid()
         Log.d("UniversityActivity", "UID guardado: $uid")
 
-        userRecyclerview = binding.listDescription
-        userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        userRecyclerview.setHasFixedSize(true)
+        binding.button1.setOnClickListener {
+            binding.infoTextView1.text = "Hola amigos"
+            binding.infoTextView1.visibility = View.VISIBLE
+            binding.infoTextView2.visibility = View.GONE
+        }
+
+        binding.button2.setOnClickListener {
+            binding.infoTextView2.text = "Te quiero"
+            binding.infoTextView2.visibility = View.VISIBLE
+            binding.infoTextView1.visibility = View.GONE
+        }
+
+
+
+
 
 
         // Inicializar Firebase Analytics
