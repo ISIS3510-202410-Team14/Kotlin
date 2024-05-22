@@ -1,12 +1,17 @@
 package com.optic.moveon.view
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,6 +40,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        if (!isNetworkAvailable(this)) {
+            Toast.makeText(
+                this,
+                "No hay conexión a internet. Conéctate para usar este servicio.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
         createFragment()
         val navigationView = findViewById<BottomNavigationView>(R.id.navigation_bar)
         navigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -184,4 +197,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocat
     override fun onMyLocationClick(p0: Location) {
         Toast.makeText(this, "Estás en ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
     }
+
+    @Suppress("DEPRECATION")
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
+
 }
+
