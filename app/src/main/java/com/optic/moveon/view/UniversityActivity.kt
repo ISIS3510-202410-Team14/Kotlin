@@ -188,7 +188,7 @@ class UniversityActivity : AppCompatActivity() {
     private fun universityFirebaseEvent(eventName: String, universityName: String?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, eventName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, universityName)
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
         firebaseAnalytics.logEvent(eventName, bundle)
     }
