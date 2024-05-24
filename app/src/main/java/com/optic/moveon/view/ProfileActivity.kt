@@ -1,10 +1,12 @@
 package com.optic.moveon.view
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.optic.moveon.R
 import com.optic.moveon.databinding.ActivityProfileBinding
 import com.squareup.picasso.Picasso
 
@@ -14,6 +16,11 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.buttonUploadDocs.setOnClickListener {
+            val intent = Intent(this, UploadActivity::class.java)
+            startActivity(intent)
+        }
 
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
