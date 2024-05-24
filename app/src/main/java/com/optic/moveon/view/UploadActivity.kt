@@ -94,9 +94,12 @@ class UploadActivity : AppCompatActivity() {
                     Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
                 }
         } ?: run {
-            Toast.makeText(this, "Por favor selecciona un archivo primero", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Por favor selecciona el archivo el cual desea subir", Toast.LENGTH_LONG).show()
         }
     }
+
+
+
 
     private fun saveFileUrlToDatabase(downloadUrl: String) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("uploads")
