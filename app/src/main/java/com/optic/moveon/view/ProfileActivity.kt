@@ -22,6 +22,7 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
 
@@ -68,7 +69,8 @@ class ProfileActivity : AppCompatActivity() {
 
 
         binding.buttonEditProfile.setOnClickListener {
-            // Iniciar la actividad de edición de perfil
+            val intent = Intent(this, EditActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -23,7 +23,7 @@ class MainViewModel(var dao: UniversityDAO) : ViewModel() {
     var localSingleUniversity : MutableLiveData<LocalUniversity> = MutableLiveData()
     fun getUniversities()=viewModelScope.launch{
         val firebase = FirebaseDatabase.getInstance()
-        firebase.setPersistenceEnabled(true)
+        //firebase.setPersistenceEnabled(true)
         var dbref = firebase.getReference("Universities")
         dbref.keepSynced(true)
         val localUniversities = fetchUniversities()
