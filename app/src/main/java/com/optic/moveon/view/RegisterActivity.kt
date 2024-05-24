@@ -90,7 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     val uid = firebaseAuth.currentUser?.uid
                                     if (uid != null) {
-                                        val user = User(uid, name, email, password)
+                                        val user = User(uid, name, email, password, null, null, null, null, null)
                                         databaseReference.child(uid).setValue(user).addOnCompleteListener { dbTask ->
                                             if (dbTask.isSuccessful) {
                                                 runOnUiThread {

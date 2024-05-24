@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-
 import android.widget.TextView
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -190,7 +188,7 @@ class UniversityActivity : AppCompatActivity() {
     private fun universityFirebaseEvent(eventName: String, universityName: String?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, eventName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, universityName)
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
         firebaseAnalytics.logEvent(eventName, bundle)
     }

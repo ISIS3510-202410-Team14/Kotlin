@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
 
         setupBottomNavigationView()
+
         
         binding.botonmicro.setOnClickListener {
             val intent = Intent(this, BusquedaVozActivity::class.java)
@@ -83,6 +84,11 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.navigation_location -> {
                     val intent = Intent(this, MapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_perfil -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
                     true
                 }
