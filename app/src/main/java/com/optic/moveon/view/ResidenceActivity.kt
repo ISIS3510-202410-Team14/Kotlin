@@ -19,43 +19,44 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.optic.moveon.DefaultApp
 import com.optic.moveon.R
-import com.optic.moveon.databinding.ActivityUniversityBinding
+import com.optic.moveon.databinding.ActivityResidenceBinding
 import com.optic.moveon.model.FavoritesCache
 import com.optic.moveon.model.UserSessionManager
-import com.optic.moveon.model.entities.LocalUniversity
 import com.optic.moveon.model.entities.LocalResidence
+import com.optic.moveon.model.entities.LocalUniversity
 import com.optic.moveon.model.entities.Requerimiento
+import com.optic.moveon.model.entities.Residence
 import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
 import com.optic.moveon.viewmodel.MainViewModel
 import com.optic.moveon.viewmodel.MainViewModelFactory
 import com.squareup.picasso.Picasso
 
-class UniversityActivity : AppCompatActivity() {
+class ResidenceActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityUniversityBinding
+    private lateinit var binding: ActivityResidenceBinding
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var dbref: DatabaseReference
     private lateinit var dbr: DatabaseReference
 
     private lateinit var userRecyclerview: RecyclerView
-    private lateinit var adapterUniversity: AdapterUniversity
-    private var university: University? = null
+    private lateinit var adapterResidence: AdapterResidence
+    private var residence: Residence? = null
     private lateinit var viewModel: MainViewModel
     private var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUniversityBinding.inflate(layoutInflater)
+        binding = ActivityResidenceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val universityDao = (application as DefaultApp).localdb.localUniversityDao()
         val residenceDao = (application as DefaultApp).localdb.localResidenceDao()
         viewModel = ViewModelProvider(this, MainViewModelFactory(universityDao, residenceDao)).get(MainViewModel::class.java)
         val uid = UserSessionManager.getUid()
-        Log.d("UniversityActivity", "UID guardado: $uid")
+        Log.d("ResidenceActivity", "UID guardado: $uid")
 
 
-        val universityId = intent.getStringExtra("university_name")
+        val residenceId = intent.getStringExtra("residence_name")
 
         binding.button1.setOnClickListener {
             // Mostrar la información de la universidad si los datos no son nulos
@@ -104,47 +105,47 @@ class UniversityActivity : AppCompatActivity() {
 
 
         println("jejejeee")
-        println(universityId)
-        Log.i("UniversityActivity", universityId ?: "University ID is null")
-        println(universityId)
+        println(residenceId)
+        Log.i("ResidenceActivity", residenceId ?: "Residence ID is null")
+        println(residenceId)
 
         binding.favorite.setOnClickListener {
             isFavorite = !isFavorite
             updateFavoriteIcon(isFavorite)
-            viewModel.updateUniversity(LocalUniversity(firebaseId = university?.id, imageUrl = university?.image, favorite = isFavorite))
+            viewModel.updateResidence(LocalResidence(firebaseId = residence?.id, imageUrl = residence?.image, favorite = isFavorite))
 
             // Registra el evento dependiendo de si es favorito o no
             if (isFavorite) {
-                Toast.makeText(this, "Universidad agregada a favoritos", Toast.LENGTH_SHORT).show()
-                universityFirebaseEvent("add_favorite", university?.name ?: "Unknown University")
+                Toast.makeText(this, "Residencia agregada a favoritos", Toast.LENGTH_SHORT).show()
+                residenceFirebaseEvent("add_favorite", residence?.name ?: "Unknown Residence")
                 Log.d("analytics","funcionoAgregar")
             } else {
-                Toast.makeText(this, "Universidad removida de favoritos", Toast.LENGTH_SHORT).show()
-                universityFirebaseEvent("remove_favorite", university?.name ?: "Unknown University")
+                Toast.makeText(this, "Residencia removida de favoritos", Toast.LENGTH_SHORT).show()
+                residenceFirebaseEvent("remove_favorite", residence?.name ?: "Unknown Residence")
                 Log.d("analytics","funcionoEliminar")
             }
         }
 
-        dbref = FirebaseDatabase.getInstance().getReference("Universities")
+        dbref = FirebaseDatabase.getInstance().getReference("Residences")
 
 
-        val query = dbref.orderByChild("name").equalTo(universityId)
+        val query = dbref.orderByChild("name").equalTo(residenceId)
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val firstUniversitySnapshot = snapshot.children.firstOrNull()
-                    university = firstUniversitySnapshot?.getValue(University::class.java)
-                    binding.universityName.text = university?.name ?: ""
-                    binding.universityLocation.text = university?.country
-                    university?.image?.let {
+                    val firstResidenceSnapshot = snapshot.children.firstOrNull()
+                    residence = firstResidenceSnapshot?.getValue(Residence::class.java)
+                    binding.residenceName.text = residence?.name ?: ""
+                    binding.residenceLocation.text = residence?.country
+                    residence?.image?.let {
                         Picasso.get().load(it).into(binding.headerImage)
                     }
-                    intFavorite(university)
+                    intFavorite(residence)
 
                     binding.chat.setOnClickListener {
-                        val intent = Intent(this@UniversityActivity, ChatActivity2::class.java)
-                        intent.putExtra("name", university?.name)
+                        val intent = Intent(this@ResidenceActivity, ChatActivity2::class.java)
+                        intent.putExtra("name", residence?.name)
                         startActivity(intent)
                     }
 
@@ -170,9 +171,9 @@ class UniversityActivity : AppCompatActivity() {
 
     }
 
-    private fun intFavorite(university: University?) {
-        viewModel.getUniversityById(university?.id)
-        viewModel.localSingleUniversity.observe(this){
+    private fun intFavorite(residence: Residence?) {
+        viewModel.getResidenceById(residence?.id)
+        viewModel.localSingleResidence.observe(this){
             isFavorite = it.favorite ?: false
             updateFavoriteIcon(it.favorite ?: false)
         }
@@ -188,10 +189,10 @@ class UniversityActivity : AppCompatActivity() {
         }
     }
 
-    private fun universityFirebaseEvent(eventName: String, universityName: String?) {
+    private fun residenceFirebaseEvent(eventName: String, residenceName: String?) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, universityName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, residenceName)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, residenceName)
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
         firebaseAnalytics.logEvent(eventName, bundle)
     }

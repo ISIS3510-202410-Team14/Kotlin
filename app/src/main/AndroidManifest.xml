@@ -68,6 +68,9 @@
             android:name=".view.AuthActivity"
             android:exported="false" />
         <activity
+            android:name=".view.ResidenceActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.InitioActivity"
             android:exported="true">
             <intent-filter>
