@@ -17,5 +17,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/user_item"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/residenceList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/universityList"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/residence_item" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
