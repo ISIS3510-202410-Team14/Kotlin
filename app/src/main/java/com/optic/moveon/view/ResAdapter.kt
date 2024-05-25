@@ -36,7 +36,7 @@ class ResAdapter(private val context: Context, private val residenceList : Array
 
 
         holder.imageView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, UniversityActivity::class.java)
+            val intent = Intent(holder.itemView.context, ResidenceActivity::class.java)
             intent.putExtra("residence_name", currentitem.name)
             println("Residence Name: ${currentitem.name}")
             holder.itemView.context.startActivity(intent)

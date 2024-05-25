@@ -1,6 +1,7 @@
 package com.optic.moveon.view
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -60,45 +61,36 @@ class ResidenceActivity : AppCompatActivity() {
 
         binding.button1.setOnClickListener {
             // Mostrar la información de la universidad si los datos no son nulos
-            binding.infoTextView1.text = "Cupos: 10"
+            binding.infoTextView1.text = "Info: Located steps away from the subway and extremely well connected with public transport to all of Spain’s capital. Node Madrid is a transformed warehouse with very spacious communal spaces. "
             binding.infoTextView1.visibility = View.VISIBLE
             binding.infoTextView2.visibility = View.GONE
         }
 
         // Configurar los OnClickListeners para los otros botones
         binding.button2.setOnClickListener {
-            binding.infoTextView2.text = "Ingles B2"
+            binding.infoTextView2.text = "Calle Sanchez Preciado 12, Madrid, 28039 - " +
+                    "Distance to Universidad Politécnica de Madrid: 7 mins by car"
             binding.infoTextView2.visibility = View.VISIBLE
             binding.infoTextView1.visibility = View.GONE
         }
 
         binding.button3.setOnClickListener {
-            binding.infoTextView2.text = "One of the most prestigious universities globally, located in Cambridge, Massachusetts, known for its law, business, medical, and engineering faculties among others."
+            binding.infoTextView2.text = "Individual bedrooms - Private bathrooms."
             binding.infoTextView2.visibility = View.VISIBLE
             binding.infoTextView1.visibility = View.GONE
         }
 
         binding.button4.setOnClickListener {
-            binding.infoTextView2.text = "Promedio: 4.8"
+            binding.infoTextView2.text = "Wi-Fi, Water, Electricity, Refrigerator, Cinema Room, Library"
             binding.infoTextView2.visibility = View.VISIBLE
             binding.infoTextView1.visibility = View.GONE
         }
 
         binding.button5.setOnClickListener {
-            binding.infoTextView2.text = "Se necesita Visa"
+            binding.infoTextView2.text = "€785/Month"
             binding.infoTextView2.visibility = View.VISIBLE
             binding.infoTextView1.visibility = View.GONE
         }
-
-
-
-
-
-
-
-
-
-
 
         // Inicializar Firebase Analytics
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
@@ -143,14 +135,21 @@ class ResidenceActivity : AppCompatActivity() {
                     }
                     intFavorite(residence)
 
-                    binding.chat.setOnClickListener {
-                        val intent = Intent(this@ResidenceActivity, ChatActivity2::class.java)
-                        intent.putExtra("name", residence?.name)
-                        startActivity(intent)
+                    binding.sitio.setOnClickListener {
+                        val url = residence?.siteUrl ?: residence?.description
+                        if (url != null && url.isNotEmpty()) {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this@ResidenceActivity, "URL no disponible", Toast.LENGTH_SHORT).show()
+                        }
                     }
 
-
-
+                    //binding.chat.setOnClickListener {
+                        //val intent = Intent(this@ResidenceActivity, ChatActivity2::class.java)
+                        //intent.putExtra("name", residence?.name)
+                        //startActivity(intent)
+                   // }
 
 
                 } else {
