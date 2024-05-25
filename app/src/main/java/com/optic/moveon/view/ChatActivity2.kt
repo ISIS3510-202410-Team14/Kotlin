@@ -60,11 +60,10 @@ class ChatActivity2 : AppCompatActivity() {
                 val chat = Chat(
                     id = uid,
                     mensaje = message,
-                    hora =  System.currentTimeMillis(), // Reemplaza este valor con la hora actual si es necesario
+                    hora =  System.currentTimeMillis(),
                     name = uid
                 )
 
-                // Verificar conexión a internet antes de enviar el mensaje
                 if (isInternetAvailable()) {
                     if (universityId != null) {
                         saveMessageToFirebase(chat,universityId)
