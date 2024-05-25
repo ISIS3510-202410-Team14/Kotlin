@@ -56,15 +56,8 @@ class UploadActivity22 : AppCompatActivity() {
         btnSelectFile.setOnClickListener {
             selectFile()
         }
-
         btnUploadFile.setOnClickListener {
-
-
             uploadFile()
-
-
-
-
 
         }
     }
