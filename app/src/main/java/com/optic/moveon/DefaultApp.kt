@@ -14,6 +14,7 @@ class DefaultApp : Application(){
         localdb = Room.databaseBuilder(
             this,
             AppDataBase::class.java, "database-name"
-        ).build()
+        ).addMigrations(AppDataBase.MIGRATION_1_2)
+        .build()
     }
 }

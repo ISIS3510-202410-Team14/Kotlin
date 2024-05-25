@@ -30,6 +30,7 @@ import com.optic.moveon.DefaultApp
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.Chat
 import com.optic.moveon.model.entities.LocalUniversity
+import com.optic.moveon.model.entities.Residence
 import com.optic.moveon.viewmodel.MainViewModel
 import com.optic.moveon.viewmodel.MainViewModelFactory
 
@@ -38,24 +39,36 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var dbref: DatabaseReference
     private lateinit var userRecyclerview: RecyclerView
+    private lateinit var residenceRecyclerview: RecyclerView
     private lateinit var universityList: ArrayList<University>
+    private lateinit var residenceList: ArrayList<Residence>
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this, MainViewModelFactory((application as DefaultApp).localdb.localUniversityDao())).get(MainViewModel::class.java)
+        val universityDao = (application as DefaultApp).localdb.localUniversityDao()
+        val residenceDao = (application as DefaultApp).localdb.localResidenceDao()
+        viewModel = ViewModelProvider(this, MainViewModelFactory(universityDao, residenceDao)).get(MainViewModel::class.java)
         userRecyclerview = binding.horizontalScrollView
+        residenceRecyclerview = binding.verticalScrollView
         userRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        residenceRecyclerview.layoutManager = LinearLayoutManager(this)
         userRecyclerview.setHasFixedSize(true)
+        residenceRecyclerview.setHasFixedSize(true)
         showSimpleAlert()
 
 
         universityList = arrayListOf<University>()
+        residenceList = arrayListOf<Residence>()
         getUserData()
+        getResidenceData()
         val adapter = MyAdapter(this, universityList)
         userRecyclerview.adapter = adapter
+        val adapter2 = ResAdapter(this, residenceList)
+        residenceRecyclerview.adapter = adapter2
+
 
         //val uid = UserSessionManager.getUid()
         //Log.d("AuthActivity", "UID guardado: $uid")
@@ -120,6 +133,14 @@ class MainActivity : AppCompatActivity() {
             universityList.clear()
             universityList.addAll(it)
             userRecyclerview.adapter?.notifyDataSetChanged()
+        }
+    }
+    private fun getResidenceData() {
+        viewModel.getResidences()
+        viewModel.residenceLiveData.observe(this) {
+            residenceList.clear()
+            residenceList.addAll(it)
+            residenceRecyclerview.adapter?.notifyDataSetChanged()
         }
     }
 }
