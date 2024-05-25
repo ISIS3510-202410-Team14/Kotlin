@@ -62,7 +62,7 @@
             android:name=".view.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".view.ResidenceActivity"
+            android:name=".view.EditActivity"
             android:exported="false" />
         <activity
             android:name=".view.AuthActivity"

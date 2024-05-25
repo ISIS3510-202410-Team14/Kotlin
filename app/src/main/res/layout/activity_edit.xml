@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".view.EditActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/areaOfStudy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Area of Study"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/homeUniversity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Home University"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/targetUniversity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Target University"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/languages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Languages"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/buttonChooseImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose Image"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"/>
+
+    <Button
+        android:id="@+id/buttonUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Profile"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
