@@ -23,6 +23,7 @@ import com.optic.moveon.databinding.ActivityUniversityBinding
 import com.optic.moveon.model.FavoritesCache
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.LocalUniversity
+import com.optic.moveon.model.entities.LocalResidence
 import com.optic.moveon.model.entities.Requerimiento
 import com.optic.moveon.model.entities.University
 import com.optic.moveon.model.entities.UniversityProperties
@@ -47,7 +48,9 @@ class UniversityActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUniversityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this, MainViewModelFactory((application as DefaultApp).localdb.localUniversityDao())).get(MainViewModel::class.java)
+        val universityDao = (application as DefaultApp).localdb.localUniversityDao()
+        val residenceDao = (application as DefaultApp).localdb.localResidenceDao()
+        viewModel = ViewModelProvider(this, MainViewModelFactory(universityDao, residenceDao)).get(MainViewModel::class.java)
         val uid = UserSessionManager.getUid()
         Log.d("UniversityActivity", "UID guardado: $uid")
 
