@@ -1,8 +1,11 @@
 package com.optic.moveon.view
 
 import android.app.Dialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -32,6 +35,8 @@ class EditActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private lateinit var dialog: Dialog
     private var imageUrl: String? = null
+    private lateinit var networkReceiver: BroadcastReceiver
+    private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 71
@@ -46,16 +51,23 @@ class EditActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
         storageReference = FirebaseStorage.getInstance().reference
+        sharedPreferences = getSharedPreferences("UserCache", Context.MODE_PRIVATE)
+        initNetworkReceiver()
+
         val bundle = intent.extras
         bundle?.let {  // Asegurarse de que el Bundle no sea nulo
-            // Mostrar el mensaje en el TextView
             binding.areaOfStudy.setText(it.getString("areaOfStudy"))
             binding.homeUniversity.setText(it.getString("home"))
             binding.targetUniversity.setText(it.getString("target"))
             binding.languages.setText(it.getString("lang"))
         }
         binding.buttonUpdate.setOnClickListener {
-            updateUserInfo()
+            if (isNetworkAvailable(this)) {
+                updateUserInfo()
+            } else {
+                cacheUserData()
+                Toast.makeText(this, "No internet connection. Your changes have been cached and will be processed once connectivity is restored.", Toast.LENGTH_LONG).show()
+            }
         }
 
         binding.buttonChooseImage.setOnClickListener {
@@ -63,6 +75,62 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+
+    private fun initNetworkReceiver() {
+        networkReceiver = object : BroadcastReceiver() {
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (isNetworkAvailable(context!!)) {
+                    retrieveCachedDataAndUpload()
+                }
+            }
+        }
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkReceiver, filter)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(networkReceiver)
+    }
+
+    private fun cacheUserData() {
+        with(sharedPreferences.edit()) {
+            putString("areaOfStudy", binding.areaOfStudy.text.toString())
+            putString("homeUniversity", binding.homeUniversity.text.toString())
+            putString("targetUniversity", binding.targetUniversity.text.toString())
+            putString("languages", binding.languages.text.toString())
+            apply()
+        }
+    }
+
+    private fun retrieveCachedDataAndUpload() {
+        val areaOfStudy = sharedPreferences.getString("areaOfStudy", null)
+        val homeUniversity = sharedPreferences.getString("homeUniversity", null)
+        val targetUniversity = sharedPreferences.getString("targetUniversity", null)
+        val languages = sharedPreferences.getString("languages", null)
+
+        if (listOf(areaOfStudy, homeUniversity, targetUniversity, languages).all { !it.isNullOrEmpty() }) {
+            binding.areaOfStudy.setText(areaOfStudy)
+            binding.homeUniversity.setText(homeUniversity)
+            binding.targetUniversity.setText(targetUniversity)
+            binding.languages.setText(languages)
+
+            updateUserInfo()
+            clearUserDataCache()
+        }
+    }
+
+    private fun clearUserDataCache() {
+        sharedPreferences.edit().clear().apply()
+    }
     private fun chooseImage() {
         val intent = Intent()
         intent.type = "image/*"
