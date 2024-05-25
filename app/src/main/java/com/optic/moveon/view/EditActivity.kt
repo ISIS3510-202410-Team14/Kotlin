@@ -29,6 +29,7 @@ class EditActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
     private lateinit var storageReference: StorageReference
+    private var imageUri: Uri? = null
     private lateinit var dialog: Dialog
     private var imageUrl: String? = null
 
@@ -45,7 +46,14 @@ class EditActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
         storageReference = FirebaseStorage.getInstance().reference
-
+        val bundle = intent.extras
+        bundle?.let {  // Asegurarse de que el Bundle no sea nulo
+            // Mostrar el mensaje en el TextView
+            binding.areaOfStudy.setText(it.getString("areaOfStudy"))
+            binding.homeUniversity.setText(it.getString("home"))
+            binding.targetUniversity.setText(it.getString("target"))
+            binding.languages.setText(it.getString("lang"))
+        }
         binding.buttonUpdate.setOnClickListener {
             updateUserInfo()
         }
@@ -68,24 +76,11 @@ class EditActivity : AppCompatActivity() {
             val filePath = data.data
             filePath?.let {
                 binding.imageView.setImageURI(it)
-                uploadImage(it)
+                imageUri = it
             }
         }
     }
 
-    private fun uploadImage(filePath: Uri) {
-        val ref = storageReference.child("images/${firebaseAuth.currentUser?.uid}")
-        ref.putFile(filePath)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                    imageUrl = uri.toString()
-                    Toast.makeText(this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
 
     private fun updateUserInfo() {
         val areaOfStudy = binding.areaOfStudy.text.toString().trim()
@@ -99,18 +94,53 @@ class EditActivity : AppCompatActivity() {
             "targetUniversity" to targetUniversity,
             "languages" to languages
         )
-
-        imageUrl?.let {
-            userUpdates["profileImageUrl"] = it
-        }
-
-        databaseReference.child(firebaseAuth.currentUser?.uid!!).updateChildren(userUpdates)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "User Info Updated Successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Failed to Update User Info", Toast.LENGTH_SHORT).show()
+        showProgressBar()
+        val ref = storageReference.child("images/${firebaseAuth.currentUser?.uid}")
+        if (imageUri != null){
+            ref.putFile(imageUri!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        imageUrl = uri.toString()
+                        Toast.makeText(this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show()
+                        imageUrl?.let {
+                            userUpdates["profileImageUrl"] = it
+                        }
+                        databaseReference.child(firebaseAuth.currentUser?.uid!!).updateChildren(userUpdates)
+                            .addOnCompleteListener { task ->
+                                hideProgressBar()
+                                if (task.isSuccessful) {
+                                    Toast.makeText(this, "User Info Updated Successfully", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(this, "Failed to Update User Info", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    }
                 }
-            }
+                .addOnFailureListener { e ->
+                    hideProgressBar()
+                    Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            databaseReference.child(firebaseAuth.currentUser?.uid!!).updateChildren(userUpdates)
+                .addOnCompleteListener { task ->
+                    hideProgressBar()
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "User Info Updated Successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Failed to Update User Info", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
+    private fun showProgressBar(){
+        dialog = Dialog(this@EditActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

@@ -22,7 +22,20 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.buttonEditProfile.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("areaOfStudy", binding.textAreaOfStudy.text.toString().replace("No area of study provided",""))
+            bundle.putString("home", binding.textHomeUniversity.text.toString().replace("No home university provided",""))
+            bundle.putString("target", binding.textTargetUniversity.text.toString().replace("No target university provided",""))
+            bundle.putString("lang", binding.textLanguages.text.toString().replace("No languages specified",""))
+            val intent = Intent(this, EditActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
         val user = FirebaseAuth.getInstance().currentUser
         val userId = user?.uid
 
@@ -64,13 +77,6 @@ class ProfileActivity : AppCompatActivity() {
             }
         }.addOnFailureListener {
             // Maneja errores
-        }
-
-
-
-        binding.buttonEditProfile.setOnClickListener {
-            val intent = Intent(this, EditActivity::class.java)
-            startActivity(intent)
         }
     }
 
