@@ -11,6 +11,7 @@ import com.optic.moveon.databinding.ActivityProfileBinding
 import com.squareup.picasso.Picasso
 
 class ProfileActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +19,8 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonUploadDocs.setOnClickListener {
-            val intent = Intent(this, UploadActivity::class.java)
+
+            val intent = Intent(this, UploadActivity22::class.java)
             startActivity(intent)
         }
 
