@@ -8,6 +8,7 @@ data class Residence(
     val description: String?= null,
     val price: Int ?= null,
     val country: String ?= null,
-    val image: String ?= null
+    val image: String ?= null,
+    val siteUrl: String? = null
 
 ): Serializable
