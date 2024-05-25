@@ -7,10 +7,6 @@
     tools:context=".view.ResidenceActivity">
 
     <!-- Vista de imagen para la cabecera -->
-
-    <!-- Nombre de la residencia -->
-
-
     <ImageView
         android:id="@+id/headerImage"
         android:layout_width="360dp"
@@ -25,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Nombre de la residencia -->
     <TextView
         android:id="@+id/residenceName"
         android:layout_width="wrap_content"
@@ -58,9 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/residenceLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp">
-
-    </LinearLayout>
+        android:layout_marginTop="8dp" />
 
     <LinearLayout
         android:id="@+id/box"
@@ -74,11 +69,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingContainer">
 
-        <!-- Opción de Información de la Universidad -->
-
-        <!-- Opción de Requisitos -->
+        <!-- Opción de Sitio Web -->
         <LinearLayout
-
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -90,59 +82,14 @@
                 android:id="@+id/sitio"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/university" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="University Info"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/req"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <ImageView
-                android:id="@+id/chat"
-                android:layout_width="30dp"
-                android:layout_height="36dp"
-                android:src="@drawable/chat" />
-
-            <TextView
-                android:id="@+id/requirementsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opinions"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- Opción de Internacionalización -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:src="@drawable/world" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Internationalization"
+                android:text="Sitio Web"
                 android:textSize="12sp" />
         </LinearLayout>
-
     </LinearLayout>
 
     <TextView
@@ -155,8 +102,7 @@
         app:layout_constraintTop_toTopOf="@+id/residenceName"
         app:layout_constraintStart_toEndOf="@+id/residenceName"
         app:layout_constraintBottom_toBottomOf="@+id/residenceLocation"
-        android:layout_marginStart="45dp"
-        />
+        android:layout_marginStart="45dp" />
 
     <ImageView
         android:id="@+id/favorite"
@@ -168,9 +114,7 @@
         tools:ignore="MissingConstraints"
         app:layout_constraintEnd_toStartOf="@+id/reviews"
         app:layout_constraintTop_toTopOf="@+id/reviews"
-        app:layout_constraintBottom_toBottomOf="@+id/reviews"
-        />
-
+        app:layout_constraintBottom_toBottomOf="@+id/reviews" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -194,7 +138,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="mostrarInfo1"
-                android:text="Cupos" />
+                android:text="Info" />
 
             <Button
                 android:id="@+id/button2"
@@ -203,7 +147,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="mostrarInfo2"
-                android:text="Idioma" />
+                android:text="Ubicación" />
 
             <Button
                 android:id="@+id/button3"
@@ -212,7 +156,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton3"
-                android:text="Info" />
+                android:text="Tipo" />
         </LinearLayout>
 
         <!-- Segunda fila de botones -->
@@ -229,7 +173,7 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton4"
-                android:text="Promedio" />
+                android:text="Servicios" />
 
             <Button
                 android:id="@+id/button5"
@@ -238,12 +182,9 @@
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
                 android:onClick="onClickButton5"
-                android:text="Visa" />
+                android:text="Precio" />
         </LinearLayout>
-
-
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/infoTextView1"
@@ -256,9 +197,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-
-
     <TextView
         android:id="@+id/infoTextView2"
         android:layout_width="wrap_content"
@@ -269,7 +207,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/infoTextView3"
@@ -303,18 +240,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
