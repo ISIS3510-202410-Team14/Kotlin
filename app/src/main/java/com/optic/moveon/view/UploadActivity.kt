@@ -1,7 +1,9 @@
 package com.optic.moveon.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -55,9 +57,17 @@ class UploadActivity : AppCompatActivity() {
         }
 
         btnUploadFile.setOnClickListener {
-            uploadFile()
+            fileUri?.let {
+                uploadFile(it)
+            } ?: run {
+                Toast.makeText(this, "Por favor selecciona el archivo el cual desea subir", Toast.LENGTH_LONG).show()
+            }
         }
+
+        // Verificar y cargar archivos almacenados en caché
+        checkAndUploadCachedFiles()
     }
+
 
     private fun selectFile() {
         val intent = Intent().apply {
@@ -80,8 +90,8 @@ class UploadActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadFile() {
-        fileUri?.let { uri ->
+    private fun uploadFile(uri: Uri) {
+        if (isInternetAvailable()) {
             val fileReference = storageReference.child("uploads/${System.currentTimeMillis()}.${getFileExtension(uri)}")
             fileReference.putFile(uri)
                 .addOnSuccessListener {
@@ -93,10 +103,34 @@ class UploadActivity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
                 }
-        } ?: run {
-            Toast.makeText(this, "Por favor selecciona el archivo el cual desea subir", Toast.LENGTH_LONG).show()
+        } else {
+            saveFileLocally(uri)
+            Toast.makeText(this, "No hay conexión a internet. El archivo se guardará en caché", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
+
+
+    private fun saveFileLocally(uri: Uri) {
+        val sharedPreferences = getSharedPreferences("CachedFiles", Context.MODE_PRIVATE)
+        val cachedFiles = sharedPreferences.getStringSet("files", mutableSetOf()) ?: mutableSetOf()
+
+        // Limitar el número de archivos en caché a 5
+        if (cachedFiles.size < 5) {
+            cachedFiles.add(uri.toString())
+            sharedPreferences.edit().putStringSet("files", cachedFiles).apply()
+        }
+    }
+
+
+
+
 
 
 
