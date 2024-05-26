@@ -38,19 +38,7 @@
             android:name=".view.ListadoActivity2"
             android:exported="false" />
         <activity
-            android:name=".view.RequirementActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.BusquedaVozActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.UniversityActivity4"
-            android:exported="false" />
-        <activity
-            android:name=".view.UniversityActivity3"
-            android:exported="false" />
-        <activity
-            android:name=".view.UniversityActivity2"
             android:exported="false" />
         <activity
             android:name=".view.UniversityActivity"
