@@ -24,7 +24,6 @@ import com.squareup.picasso.Picasso
 
 class AdapterUniversity(private val university: University, private val context: Context) : RecyclerView.Adapter<AdapterUniversity.MyViewHolder>() {
     private  var firebaseAnalytics: FirebaseAnalytics
-
     private var databaseReference: DatabaseReference
 
     init {

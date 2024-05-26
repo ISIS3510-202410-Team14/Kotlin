@@ -5,31 +5,18 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+
 import com.optic.moveon.R
-import com.optic.moveon.databinding.ActivityLoginBinding
 import com.optic.moveon.databinding.ActivityMainBinding
 import com.optic.moveon.model.entities.University
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.optic.moveon.DefaultApp
 import com.optic.moveon.model.UserSessionManager
-import com.optic.moveon.model.entities.Chat
-import com.optic.moveon.model.entities.LocalUniversity
 import com.optic.moveon.model.entities.Residence
 import com.optic.moveon.viewmodel.MainViewModel
 import com.optic.moveon.viewmodel.MainViewModelFactory

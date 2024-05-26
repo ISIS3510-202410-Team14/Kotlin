@@ -1,15 +1,10 @@
 package com.optic.moveon.view
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.optic.moveon.R
 import android.content.Intent
 import android.net.ConnectivityManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +13,6 @@ import android.widget.Toast
 import android.util.Log
 import android.text.Editable
 import android.text.TextWatcher
-import java.util.Locale
 
 class BusquedaVozActivity : AppCompatActivity() {
 

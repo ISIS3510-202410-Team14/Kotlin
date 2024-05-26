@@ -2,7 +2,6 @@ package com.optic.moveon.view
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.widget.ImageView
 
 import com.squareup.picasso.Picasso
