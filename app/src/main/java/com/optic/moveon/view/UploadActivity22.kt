@@ -1,8 +1,7 @@
 package com.optic.moveon.view
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -13,10 +12,15 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.optic.moveon.databinding.ActivityUpload22Binding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.*
 
 class UploadActivity22 : AppCompatActivity() {
@@ -31,6 +35,8 @@ class UploadActivity22 : AppCompatActivity() {
     private lateinit var selectFileLauncher: ActivityResultLauncher<Intent>
     private val cachedMessages: MutableList<String> = mutableListOf()
     private var isUploading = false
+
+    private lateinit var connectivityReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +63,22 @@ class UploadActivity22 : AppCompatActivity() {
         }
         btnUploadFile.setOnClickListener {
             uploadFile()
-
         }
+
+        // Register the connectivity receiver
+        connectivityReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (isInternetAvailable()) {
+                    uploadCachedMessages()
+                }
+            }
+        }
+        registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(connectivityReceiver)
     }
 
     private fun selectFile() {
@@ -83,11 +103,9 @@ class UploadActivity22 : AppCompatActivity() {
     private fun uploadFile() {
         if (isInternetAvailable()) {
             if (cachedMessages.isNotEmpty() && !isUploading) {
-                // Si hay mensajes en caché, envíalos
                 isUploading = true
                 uploadCachedMessages()
             } else {
-                // Si no hay mensajes en caché o ya se está subiendo un archivo, sube el archivo actual
                 fileUri?.let { uri ->
                     uploadFileToFirebase(uri)
                 } ?: run {
@@ -95,8 +113,7 @@ class UploadActivity22 : AppCompatActivity() {
                 }
             }
         } else {
-            // Si no hay conexión a Internet, guarda el mensaje en caché
-            saveFileLocally() // Llama a la función saveFileLocally aquí
+            saveFileLocally()
             saveMessageLocally("Mensaje que deseas guardar")
             Toast.makeText(this, "No hay conexión a Internet. El mensaje se ha guardado localmente.", Toast.LENGTH_LONG).show()
         }
@@ -106,92 +123,91 @@ class UploadActivity22 : AppCompatActivity() {
         cachedMessages.add(message)
     }
 
-
     private fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
 
-
-
     private fun uploadCachedMessages() {
         if (isInternetAvailable()) {
-            val sharedPreferences = getSharedPreferences("CachedFiles", Context.MODE_PRIVATE)
-            val cachedFiles = sharedPreferences.getStringSet("files", mutableSetOf()) ?: mutableSetOf()
+            lifecycleScope.launch(Dispatchers.IO) {
+                val sharedPreferences = getSharedPreferences("CachedFiles", Context.MODE_PRIVATE)
+                val cachedFiles = sharedPreferences.getStringSet("files", mutableSetOf()) ?: mutableSetOf()
 
-            if (cachedFiles.isNotEmpty()) {
-                val iterator = cachedFiles.iterator()
-                var count = 0
+                if (cachedFiles.isNotEmpty()) {
+                    val iterator = cachedFiles.iterator()
+                    while (iterator.hasNext()) {
+                        val cachedFileUriString = iterator.next()
+                        val cachedFileUri = Uri.parse(cachedFileUriString)
+                        uploadFileToFirebase(cachedFileUri)
+                        iterator.remove() // Remove the file after attempting upload
+                    }
 
-                while (iterator.hasNext() && count < 5) {
-                    val cachedFileUriString = iterator.next()
-                    val cachedFileUri = Uri.parse(cachedFileUriString)
-                    // Subir el archivo guardado en caché a Firebase
-                    uploadFileToFirebase(cachedFileUri)
-                    count++
+                    sharedPreferences.edit().putStringSet("files", cachedFiles).apply()
                 }
-
-                // Si hay más de 5 archivos sin enviar, mostrar aviso
-                if (cachedFiles.size > 5) {
-                    Toast.makeText(this, "Hay archivos adicionales en caché que no se pudieron enviar debido a la falta de conexión a internet", Toast.LENGTH_SHORT).show()
-                }
-
-                // Limpiar archivos en caché después de enviarlos
-                sharedPreferences.edit().remove("files").apply()
             }
         } else {
-            // Si no hay conexión a Internet, mostrar un mensaje al usuario
             Toast.makeText(this, "No hay conexión a Internet. No se pueden enviar los archivos en caché en este momento.", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun saveFileLocally() {
-        val inputStream = contentResolver.openInputStream(fileUri)
-        val outputStream: OutputStream = FileOutputStream(File(cacheDir, "cached_file"))
-        inputStream?.copyTo(outputStream)
-        inputStream?.close()
-        outputStream.close()
+        val sharedPreferences = getSharedPreferences("CachedFiles", Context.MODE_PRIVATE)
+        val cachedFiles = sharedPreferences.getStringSet("files", mutableSetOf()) ?: mutableSetOf()
+
+        cachedFiles.add(fileUri.toString())
+
+        sharedPreferences.edit().putStringSet("files", cachedFiles).apply()
     }
 
     private fun uploadFileToFirebase(uri: Uri) {
-        val fileReference = storageReference.child("uploads/${System.currentTimeMillis()}.${getFileExtension(uri)}")
-        fileReference.putFile(uri)
-            .addOnSuccessListener {
-                fileReference.downloadUrl.addOnSuccessListener { uri ->
-                    val downloadUrl = uri.toString()
-                    saveFileUrlToDatabase(downloadUrl)
-                    // Después de subir el archivo, intenta subir los mensajes en caché
-                    if (cachedMessages.isNotEmpty()) {
-                        uploadCachedMessages()
-                    } else {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val contentResolver = contentResolver
+                val fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
+                fileDescriptor?.use {
+                    val fileReference = storageReference.child("uploads/${System.currentTimeMillis()}.${getFileExtension(uri)}")
+                    fileReference.putFile(uri).await()
+                    val downloadUrl = fileReference.downloadUrl.await()
+                    saveFileUrlToDatabase(downloadUrl.toString())
+                    isUploading = false
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@UploadActivity22, "Archivo subido correctamente", Toast.LENGTH_LONG).show()
+                    }
+                } ?: run {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@UploadActivity22, "No se pudo abrir el archivo", Toast.LENGTH_LONG).show()
                         isUploading = false
-                        Toast.makeText(this, "Archivo subido correctamente", Toast.LENGTH_LONG).show()
                     }
                 }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@UploadActivity22, "Error al acceder al archivo: ${e.message}", Toast.LENGTH_LONG).show()
+                    isUploading = false
+                }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-                isUploading = false
-            }
+        }
     }
 
     private fun saveFileUrlToDatabase(downloadUrl: String) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("uploads")
-        databaseReference.child("val").setValue(downloadUrl)
-            .addOnSuccessListener {
-                // Si se ha subido correctamente el archivo, intenta subir los mensajes en caché
-                if (cachedMessages.isNotEmpty()) {
-                    uploadCachedMessages()
-                } else {
-                    isUploading = false
-                    Toast.makeText(this, "URL guardada en la base de datos", Toast.LENGTH_LONG).show()
+        val newUploadKey = databaseReference.push().key // Generate a new unique key
+        newUploadKey?.let {
+            databaseReference.child(it).setValue(downloadUrl)
+                .addOnSuccessListener {
+                    if (cachedMessages.isNotEmpty()) {
+                        uploadCachedMessages()
+                    } else {
+                        isUploading = false
+                        Toast.makeText(this, "URL guardada en la base de datos", Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-                isUploading = false
-            }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+                    isUploading = false
+                }
+        }
     }
 
     private fun getFileExtension(uri: Uri): String? {
