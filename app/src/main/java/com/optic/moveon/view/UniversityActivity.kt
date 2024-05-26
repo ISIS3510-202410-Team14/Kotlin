@@ -4,12 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DataSnapshot
@@ -20,13 +17,10 @@ import com.google.firebase.database.ValueEventListener
 import com.optic.moveon.DefaultApp
 import com.optic.moveon.R
 import com.optic.moveon.databinding.ActivityUniversityBinding
-import com.optic.moveon.model.FavoritesCache
 import com.optic.moveon.model.UserSessionManager
 import com.optic.moveon.model.entities.LocalUniversity
-import com.optic.moveon.model.entities.LocalResidence
-import com.optic.moveon.model.entities.Requerimiento
+
 import com.optic.moveon.model.entities.University
-import com.optic.moveon.model.entities.UniversityProperties
 import com.optic.moveon.viewmodel.MainViewModel
 import com.optic.moveon.viewmodel.MainViewModelFactory
 import com.squareup.picasso.Picasso

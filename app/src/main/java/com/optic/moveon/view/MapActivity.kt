@@ -6,19 +6,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
+
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentManager
-import com.google.android.gms.maps.CameraUpdateFactory
+
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -26,7 +21,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.optic.moveon.R
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {

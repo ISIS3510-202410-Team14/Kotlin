@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.firebase.analytics.FirebaseAnalytics
