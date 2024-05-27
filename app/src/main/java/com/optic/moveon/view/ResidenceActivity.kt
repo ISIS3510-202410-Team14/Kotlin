@@ -149,4 +149,18 @@ class ResidenceActivity : AppCompatActivity() {
         }
         firebaseAnalytics.logEvent(eventName, bundle)
     }
+
+    fun recommendResidences() {
+        // getTopUniversities { universities ->
+        //     for (university in universities) {
+        //         // Supongamos que tenemos una función que obtiene residencias cercanas a una universidad
+        //         getNearbyResidences(university) { residences ->
+        //             // Aquí puedes mostrar las residencias recomendadas al usuario
+        //             for (residence in residences) {
+        //                 Log.d("Recommendation", "Recommended Residence: ${residence.name} near ${university.name}")
+        //             }
+        //         }
+        //     }
+        // }
+    }
 }
