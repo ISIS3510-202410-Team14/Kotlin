@@ -3,6 +3,7 @@ package com.optic.moveon.view
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,7 @@ class ChatActivity2 : AppCompatActivity() {
     private lateinit var chatList: ArrayList<Chat>
     private lateinit var userRecyclerview: RecyclerView
     private lateinit var connectivityManager: ConnectivityManager
-
+    private var startTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChat2Binding.inflate(layoutInflater)
@@ -71,6 +72,28 @@ class ChatActivity2 : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, escriba un mensaje", Toast.LENGTH_SHORT).show()
             }
         }
+        startTime = SystemClock.elapsedRealtime()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Calcular el tiempo total cuando la actividad se detiene y guardarlo en Firebase
+        val elapsedTime = SystemClock.elapsedRealtime() - startTime
+        saveTimeToFirebase(elapsedTime)
+    }
+
+
+    private fun saveTimeToFirebase(time: Long) {
+        val uid = UserSessionManager.getUid()
+        val dbref = FirebaseDatabase.getInstance().getReference("Time/$uid")
+        dbref.setValue(time)
+            .addOnSuccessListener {
+                Log.d("ChatActivity2", "Tiempo guardado exitosamente en Firebase: $time")
+            }
+            .addOnFailureListener { e ->
+                Log.e("ChatActivity2", "Error al guardar el tiempo en Firebase: ${e.message}")
+            }
     }
 
     private fun saveMessageLocally(chat: Chat) {
