@@ -110,11 +110,11 @@ class UniversityActivity : AppCompatActivity() {
             // Registra el evento dependiendo de si es favorito o no
             if (isFavorite) {
                 Toast.makeText(this, "Universidad agregada a favoritos", Toast.LENGTH_SHORT).show()
-                universityFirebaseEvent("add_favorite", university?.name ?: "Unknown University")
+                universityFirebaseEvent(university?.name ?: "Unknown University")
                 Log.d("analytics","funcionoAgregar")
             } else {
                 Toast.makeText(this, "Universidad removida de favoritos", Toast.LENGTH_SHORT).show()
-                universityFirebaseEvent("remove_favorite", university?.name ?: "Unknown University")
+                universityFirebaseEvent(university?.name ?: "Unknown University")
                 Log.d("analytics","funcionoEliminar")
             }
         }
@@ -182,12 +182,14 @@ class UniversityActivity : AppCompatActivity() {
         }
     }
 
-    private fun universityFirebaseEvent(eventName: String, universityName: String?) {
+    private fun universityFirebaseEvent(universityName: String?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, universityName)
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, universityName)
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
-        firebaseAnalytics.logEvent(eventName, bundle)
+        if (universityName != null) {
+            firebaseAnalytics.logEvent(universityName, bundle)
+        }
     }
 
 }
